@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+
+	<select id="cateList" resultType="boardVo"> SELECT BOARDCODE_NO,
+		BOARDCODE_NAME FROM BOARD_CODE WHERE BOARDCODE_NO = '4' </select>
+	<select id="boardList" resultType="boardVo" parameterType="int">
+		SELECT SUBSTR(TITLE,0,20)TITLE,B.BOARD_NO,
+		BOARD_CNT,C.BOARDCODE_NAME,M.MEM_NICK WRITER FROM BOARD B , BOARD_CODE
+		C, MEMBER M WHERE B.BOARDCODE_NO = C.BOARDCODE_NO AND B.MEM_NO =
+		M.MEM_NO AND B.BOARDCODE_NO = C.BOARDCODE_NO AND B.BOARDCODE_NO = '4'
+		AND B.DEL_YN ='N' ORDER BY BOARD_NO DESC </select>
+	<insert id="PostAdd" parameterType="boardVo"
+		useGeneratedKeys="true" keyProperty="board_no" keyColumn="BOARD_NO"> INSERT INTO
+		BOARD (BOARD_NO,MEM_NO , TITLE , CONTENT ,
+		DATE_OF_PRE,BOARD_CNT,BOARDCODE_NO) VALUES (board_no_seq.NEXTVAL,
+		#{mem_no}, #{title}, #{content}, SYSDATE, 0, 4) </insert>
+	<select id="boardCnt" resultType="boardVo"> SELECT COUNT(*) FROM BOARD
+		WHERE BOARDCODE_NO = 4 </select>
+	<select id="boardImgpath" resultType="String"> SELECT PATH FROM BOARD_IMG
+		WHERE BOARD_NO = #{board_no} </select>
+	<select id="boardDetail" resultType="boardVo"
+		parameterType="int"> SELECT BOARD_NO ,TITLE , CONTENT, B.MEM_NO , BOARD_CNT
+		, B.DATE_OF_PRE, C.BOARDCODE_NAME,M.MEM_NAME WRITER FROM BOARD B,
+		BOARD_CODE C, MEMBER M WHERE B.BOARDCODE_NO = C.BOARDCODE_NO AND
+		B.MEM_NO =M.MEM_NO AND B.BOARD_NO = #{board_no} AND B.BOARDCODE_NO = 4
+	</select>
+	<select id="boardListSortedByCount" resultType="boardVo"> 
+	SELECT * FROM	BOARD WHERE BOARDCODE_NO = 4   AND DEL_YN ='N'ORDER BY
+		COALESCE(BOARD_CNT, 0) DESC </select>
+	<insert id="savePostImage" parameterType="map"> INSERT INTO
+		BOARD_IMG(BOARD_IMG_NO, BOARD_NO, IMG_DATE, IMG_SIZE, PATH) VALUES
+		(board_img_seq.NEXTVAL, #{board_no, jdbcType=INTEGER}, SYSDATE, NULL,
+		#{path}) </insert>
+	<update id="updateBoardClickCount" parameterType="int"> UPDATE BOARD
+		SET BOARD_CNT = BOARD_CNT +1 WHERE BOARD_NO =#{board_no} </update>
+	<update id="updatePost" parameterType="boardVo">
+		UPDATE BOARD
+		<set>
+			<if test="content != null"> CONTENT = #{content}, </if>
+			<if test="title != null"> TITLE = #{title} </if>
+			<!-- 추가로 업데이트할 필드가 있다면 여기에 추가 -->
+		</set>
+		WHERE BOARD_NO = #{board_no}
+	</update>
+	<update id="deletePost" parameterType="int"> UPDATE BOARD SET
+		DEL_YN='Y' WHERE BOARD_NO=#{board_no} </update>
+</mapper>

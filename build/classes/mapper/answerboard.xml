@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="answerboard">
+
+	<!-- 답변 조회 -->
+    <select id="getAnswerByQuestionNo" parameterType="int" resultType="answerVo">
+        SELECT ANSWER_NO,
+               QUESTION_NO,
+               ADMIN_NO,
+               CONTENT AS ANSWER_CONTENT,
+               DATE_OF_PRE AS ANSWER_DATE
+        FROM ANSWER_BOARD
+        WHERE QUESTION_NO = #{questionNo}
+    </select>
+
+    <!-- 답변 등록 -->
+    <insert id="insertAnswer" parameterType="answerVo">
+        INSERT INTO ANSWER_BOARD (ANSWER_NO, QUESTION_NO, ADMIN_NO, CONTENT, DATE_OF_PRE)
+        VALUES (ANSWER_SEQ.NEXTVAL, #{question_no}, #{admin_no}, #{answer_content,jdbcType=VARCHAR}, SYSDATE)
+    </insert>
+
+    <!-- 답변 수정 -->
+    <update id="updateAnswer" parameterType="answerVo">
+        UPDATE ANSWER_BOARD
+        SET CONTENT = #{answer_content},
+            DATE_OF_PRE = SYSDATE
+        WHERE ANSWER_NO = #{answer_no}
+    </update>
+
+
+
+
+
+
+
+
+</mapper>

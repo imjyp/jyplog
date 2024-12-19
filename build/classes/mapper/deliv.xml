@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.order.dao.IDelivDao">
+
+    <!-- 배송 정보 삽입 -->
+    <insert id="insertDelivery" parameterType="kr.or.ddit.order.vo.DelivVo" useGeneratedKeys="true" keyProperty="deliv_no" keyColumn="DELIV_NO">
+        INSERT INTO DELIV (DELIV_NO, BASE_ADDR, DETAIL_ADDR, DELIV_NAME, REQUEST_NOTE, RECIPIENT, PHONE, MEM_NO)
+        VALUES (SEQ_DELIV_NO.NEXTVAL, #{base_addr}, #{detail_addr}, #{deliv_name}, #{request_note}, #{recipient}, #{phone}, #{mem_no})
+    </insert>
+    
+    <!-- 가장 최근 배송 정보 조회 -->
+    <select id="getLatestDelivery" parameterType="int" resultType="kr.or.ddit.order.vo.DelivVo">
+        SELECT * FROM (
+            SELECT * FROM DELIV WHERE MEM_NO = #{mem_no} ORDER BY DELIV_NO DESC
+        ) WHERE ROWNUM = 1
+    </select>
+
+    <!-- 배송 정보 조회 (배송 번호로 조회) -->
+    <select id="getDelivery" parameterType="int" resultType="kr.or.ddit.order.vo.DelivVo">
+        SELECT * FROM DELIV WHERE DELIV_NO = #{deliv_no}
+    </select>
+
+    <!-- 주문 번호(orderId)를 기반으로 배송 정보 조회 -->
+    <select id="selectDeliveryByOrderId" parameterType="int" resultType="kr.or.ddit.order.vo.DelivVo">
+        SELECT D.* 
+        FROM DELIV D
+        JOIN ORDERS O ON D.DELIV_NO = O.DELIV_NO
+        WHERE O.ORDER_NO = #{orderId}
+    </select>
+
+    <!-- 특정 회원의 모든 배송 정보 조회 -->
+    <select id="getAllDeliveries" parameterType="int" resultType="kr.or.ddit.order.vo.DelivVo">
+        SELECT * FROM DELIV WHERE MEM_NO = #{mem_no}
+    </select>
+
+    <!-- 배송 정보 업데이트 -->
+    <update id="updateDelivery" parameterType="kr.or.ddit.order.vo.DelivVo">
+        UPDATE DELIV
+        SET BASE_ADDR = #{base_addr},
+            DETAIL_ADDR = #{detail_addr},
+            DELIV_NAME = #{deliv_name},
+            REQUEST_NOTE = #{request_note},
+            RECIPIENT = #{recipient},
+            PHONE = #{phone}
+        WHERE DELIV_NO = #{deliv_no}
+    </update>
+
+    <!-- 배송 정보 삭제 -->
+    <delete id="deleteDelivery" parameterType="int">
+        DELETE FROM DELIV WHERE DELIV_NO = #{deliv_no}
+    </delete>
+
+</mapper>

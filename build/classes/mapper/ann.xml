@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ann">
+
+<!-- 	 	카테고리 리스트 -->
+	<select id="aCateList" resultType="boardVo">
+		SELECT BOARDCODE_NO, BOARDCODE_NAME
+			FROM BOARD_CODE
+	</select>
+<!-- 		게시판 리스트 -->
+	<select id="aList" resultType="boardVo" parameterType="boardVo">
+		SELECT B.BOARD_NO, 
+           B.TITLE, 
+           B.CONTENT,
+           SUBSTR(B.CONTENT, 1, 200) AS DETAIL, 
+           B.BOARD_CNT, 
+           M.MEM_NAME AS WRITER, 
+           C.BOARDCODE_NAME,
+           B.DATE_OF_PRE
+	    FROM BOARD B
+	    JOIN BOARD_CODE C ON B.BOARDCODE_NO = C.BOARDCODE_NO
+	    LEFT JOIN MEMBER M ON B.MEM_NO = M.MEM_NO
+	    WHERE B.BOARDCODE_NO = #{boardcode_no}
+	      AND B.DEL_YN = 'N'
+	    ORDER BY B.BOARD_NO DESC
+	</select>
+	
+	<select id="aDetail" resultType="boardVo" parameterType="boardVo">		<!-- int 오류나면 boardVo -->
+		 SELECT B.BOARD_NO,
+           B.TITLE,
+           B.CONTENT AS CONTENT, <!-- content 컬럼 선택 -->
+           SUBSTR(B.CONTENT, 1, 200) AS DETAIL,
+           B.BOARD_CNT,
+           M.MEM_NAME AS WRITER,
+           C.BOARDCODE_NAME,
+           B.DATE_OF_PRE
+	    FROM BOARD B
+	    JOIN BOARD_CODE C ON B.BOARDCODE_NO = C.BOARDCODE_NO
+	    LEFT JOIN MEMBER M ON B.MEM_NO = M.MEM_NO
+	    WHERE B.BOARD_NO = #{board_no}
+	      AND B.DEL_YN = 'N'
+	</select>
+	
+	<insert id="insertNotice" parameterType="kr.or.ddit.board.vo.BoardVo">
+	    INSERT INTO board (board_no, boardcode_no, title, content, date_of_pre, admin_no, del_yn)
+	    VALUES (board_no_seq.NEXTVAL, #{boardcode_no}, #{title}, #{content}, SYSDATE, #{admin_no}, 'N')
+	</insert>
+	
+	<update id="updateNotice" parameterType="kr.or.ddit.board.vo.BoardVo">
+	    UPDATE board
+	    SET title = #{title}, content = #{content}
+	    WHERE board_no = #{board_no} AND del_yn = 'N'
+	</update>
+	
+	<update id="deleteNotice" parameterType="int">
+	    UPDATE board
+	    SET del_yn = 'Y'
+	    WHERE board_no = #{board_no}
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+

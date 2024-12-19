@@ -1,0 +1,526 @@
+@charset "UTF-8";
+
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Noto Sans KR', sans-serif;
+	font-weight: bold !important;
+}
+
+.body {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+body {
+	background-color: #ffffff;
+	color: #333;
+}
+
+a {
+	font-size: 20px;
+	text-decoration: none;
+	color: inherit;
+}
+footer {
+    position: relative; /* 고정 위치 */
+    left: 0; /* 왼쪽 끝에 정렬 */
+    bottom: 0; /* 하단에 정렬 */
+    width: 100%; /* 전체 너비 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    padding: 10px; /* 여백 */
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1); 
+        z-index: 100;
+        margin-top: 10px;
+    }
+
+footer>p {
+	padding: 30px;
+	text-align: center;
+	font-size: 12px;
+}
+
+/* 헤더 스타일 */
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 20px;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	background-color: #fff;
+	border-bottom: 1px solid #ddd;
+}
+
+.logo>img{
+	width: 50px;
+}
+
+.header-left {
+	display: flex;
+	align-items: center;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px; /* 이미지와 버튼 사이의 간격 설정 */
+}
+
+.header-right img {
+    max-width:25px;  /* 원하는 너비 설정 */
+    height: auto;  /* 비율에 맞춰 자동으로 높이 조정 */
+    margin-right: 20px;
+}
+
+.nav-menu ul {
+	display: flex;
+	list-style: none;
+}
+
+.nav-menu ul li {
+	margin-right: 30px;
+}
+
+.nav-menu ul li a {
+	text-decoration: none;
+	color: rgb(113, 115, 128);
+	font-size: 1.3rem;
+	font-weight: bold !important;
+}
+
+.nav-menu ul li a:focus {
+	font-weight: bold;
+	color: black;
+}
+
+.logo {
+	font-weight: 400;
+	font-size: 27px !important;
+	color: #323232 !important;
+	padding-bottom: 3px;
+}
+
+.logo:focus {
+	color: black;
+}
+
+.header-center {
+	display: flex;
+	align-items: center;
+}
+
+.search-bar {
+	padding: 8px;
+	width: 300px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+}
+
+.header-right button {
+	padding: 6px 10px;
+	border: none;
+	background-color: #000000;
+	color: white;
+	border-radius: 3px;
+	cursor: pointer;
+	font-size: 1rem;
+}
+
+.btnone {
+	background-color: inherit !important;
+	color: black !important;
+}
+
+/* 서브 메뉴 스타일 */
+.sub-menu {
+	display: flex;
+	justify-content: flex-start;
+	padding: 20px;
+	padding-left: 20px;
+	background-color: #ffffff;
+	border-bottom: 1px solid #ddd;
+}
+
+.sub-menu ul {
+	display: flex;
+	list-style: none;
+}
+
+.sub-menu ul li {
+	margin-right: 20px;
+}
+
+.sub-menu ul li a {
+	text-decoration: none;
+	color: rgb(147, 149, 159);
+	font-size: 1.1rem;
+	font-weight: bold !important;
+}
+.sub-menu>ul>li>a:focus{
+
+color:black;
+font-weight: bold !important;
+
+
+}
+
+.home {
+	color: black!important;
+}
+.comm>a{
+color:black!important;}
+
+/* 메인 배너 섹션 */
+.main-banner {
+	display: flex;
+	padding: 20px;
+	background-color: #fff;
+}
+
+.banner-image {
+	flex: 2;
+	background-color: #ddd;
+	height: 400px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 24px;
+	color: #666;
+	position: relative;
+}
+
+.banner-image::after {
+	content: "20년 된 목조주택, 낡아도 이렇게 멋질 수 있어요?";
+	position: absolute;
+	bottom: 10px;
+	left: 20px;
+	color: #fff;
+	font-size: 1.2rem;
+	background: rgba(0, 0, 0, 0.5);
+	padding: 5px 10px;
+	border-radius: 5px;
+}
+
+.side-ad {
+	flex: 1;
+	margin-left: 20px;
+	background-color: black;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	border-radius: 8px;
+}
+
+.side-ad h3 {
+	margin-bottom: 10px;
+	font-size: 1.1rem;
+	color: white;
+}
+
+.side-ad p {
+	text-align: center;
+	font-size: 0.9rem;
+	color: white;
+}
+
+/* 아이콘 메뉴 섹션 */
+.icon-menu {
+	display: flex;
+	justify-content: space-around;
+	background-color: #fff;
+	padding: 20px 0;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+}
+
+.icon-item {
+	text-align: center;
+	color: #333;
+}
+
+.icon-item img {
+	width: 50px;
+	height: 50px;
+	margin-bottom: 5px;
+}
+
+.icon-item p {
+	font-size: 0.8rem;
+}
+
+/* 인기 게시글 섹션 */
+.popular-posts {
+	padding: 20px;
+	background-color: #fff;
+	margin-top: 20px;
+}
+
+.popular-posts>h2 {
+	margin-bottom: 15px;
+	font-size: 20px;
+}
+
+.post-items {
+	display: flex;
+	overflow-x: auto;
+	gap: 10px;
+}
+
+.post-item {
+	flex: 0 0 250px;
+	height: 230px;
+	background-color: #eee;
+	border-radius: 5px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 0.9rem;
+	color: #333;
+}
+
+/* 섹션 구분선 */
+.section-divider {
+	height: 1px;
+	background-color: #e8e8e8;
+}
+
+/* 광고 및 추천 섹션 */
+.ads-section {
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
+	background-color: #fff;
+	margin-top: 20px;
+}
+
+.ad-banner {
+	width: 100%;
+	height: 100px;
+	background-color: #ddd;
+	margin-bottom: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #666;
+}
+
+.top-header {
+	width: 100%;
+	max-width: 1200px;
+	background-color: #f8f9fa;
+	border-bottom: 1px solid #e0e0e0;
+	padding: 10px 20px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 14px;
+	box-sizing: border-box;
+}
+
+.top-header nav {
+	display: flex;
+	gap: 15px;
+}
+
+.top-header a {
+	color: #555;
+	text-decoration: none;
+}
+
+.top-header a:hover {
+	color: #000;
+}
+
+.main-wrapper {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	max-width: 1200px;
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+.container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 20px;
+	width: 100%;
+}
+
+.item {
+	background-color: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: box-shadow 0.3s ease;
+	width: calc(33.33% - 20px);
+	text-align: center;
+}
+
+.item:hover {
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.item img {
+	width: 100%;
+	height: 180px;
+	object-fit: cover;
+}
+
+.item-info {
+	padding: 10px 15px;
+	border-top: 1px solid #f0f0f0;
+}
+
+.item-title {
+	font-size: 13px;
+	font-weight: bold;
+	margin-bottom: 5px;
+	color: #333;
+}
+
+.item-description {
+	font-size: 12px;
+	color: #888;
+}
+
+.item-price {
+	font-size: 12px;
+	color: #ff5722;
+	margin-top: 5px;
+}
+
+/* 오늘의 딜 섹션 */
+.deals-section {
+	padding: 20px;
+	background-color: #ffffff;
+}
+
+.deals-section>h2 {
+	font-size: 20px;
+	margin-bottom: 15px;
+}
+
+.deals-container {
+	display: flex;
+	gap: 10px;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	margin-bottom:300px ;
+}
+
+.deal-item {
+	width: calc(25% - 10px);
+	border: 1px solid #eee;
+	border-radius: 8px;
+	background-color: white;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	transition: box-shadow 0.3s ease;
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	position: relative;
+}
+
+.deal-item img {
+	width: 100%;
+	height: 250px;
+	object-fit: cover;
+}
+
+.brand {
+	font-size: 12px;
+	color: #777;
+	margin-bottom: 5px;
+}
+
+.description {
+	font-size: 14px;
+	color: #333;
+	line-height: 1.4;
+	margin-bottom: 10px;
+}
+
+.price {
+	font-size: 16px;
+	color: #2d2d2d;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+.rating {
+	color: #ff0101;
+	margin-top: 5px;
+	font-size: 12px;
+	display: flex;
+	align-items: center;
+}
+
+.rating span {
+	margin-left: 5px;
+	color: #555;
+}
+
+.tags {
+	display: flex;
+	gap: 5px;
+	margin-top: 5px;
+}
+
+.special {
+	background-color: #f03e3e;
+	color: white;
+	padding: 3px 8px;
+	border-radius: 5px;
+	font-size: 12px;
+}
+
+.dropdown-menu {
+	position: absolute;
+	background-color: #ffffff;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	width: 150px; /* Adjust width as needed */
+	top:30px;
+	left:-45px;
+}
+
+.dropdown-menu ul {
+	list-style: none;
+	padding: 10px 0;
+	margin: 0;
+}
+
+.dropdown-menu ul li {
+	padding: 8px 15px;
+}
+
+.dropdown-menu ul li a {
+	color: #333;
+	text-decoration: none;
+	font-size: 13px;
+	font-weight: lighter !important;
+}
+
+.dropdown-menu ul li:hover {
+	background-color: #f0f0f0; /* Highlight on hover */
+}
+.write{
+	display:inline-flex;
+	position: relative;
+
+}

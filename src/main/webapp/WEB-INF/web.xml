@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" 
+	version="4.0">
+  <display-name>MiddleProject2</display-name>
+  
+  
+  <!-- 필터 적용할 시 활성화 하기 -->
+  
+<!--   <filter>			 -->
+<!-- 		<filter-name>EncodingFilter</filter-name>		 -->
+<!-- 		<filter-class>kr.or.ddit.filter.EncodingFilter</filter-class> -->
+<!-- 		<init-param> -->
+<!-- 			<param-name>encode</param-name> -->
+<!-- 			<param-value>UTF-8</param-value> -->
+<!-- 		</init-param> -->
+<!-- 	</filter> -->
+<!-- 	<filter-mapping> -->
+<!-- 		<filter-name>EncodingFilter</filter-name> -->
+<!-- 		<url-pattern>/*</url-pattern> -->
+<!-- 	</filter-mapping> -->
+
+
+<!-- <servlet> -->
+<!-- 		<servlet-name>MemberMain</servlet-name> -->
+<!-- 		<servlet-class>kr.or.ddit.member.controller.MemberMainController</servlet-class>	 -->
+<!-- 	</servlet> -->
+<!-- 	<servlet-mapping> -->
+<!-- 		<servlet-name>MemberMain</servlet-name> -->
+<!-- 		<url-pattern>/MemberMain</url-pattern> -->
+<!-- 	</servlet-mapping> -->
+	
+<!-- 	<servlet> -->
+<!-- 	    <servlet-name>JoinController</servlet-name> -->
+<!-- 	    <servlet-class>kr.or.ddit.member.controller.JoinController</servlet-class> -->
+<!-- 	</servlet> -->
+<!-- 	<servlet-mapping> -->
+<!--     	<servlet-name>JoinController</servlet-name> -->
+<!--     	<url-pattern>/join.do</url-pattern> -->
+<!-- 	</servlet-mapping> -->
+
+<!-- 	<servlet> -->
+<!-- 	    <servlet-name>AnnController</servlet-name> -->
+<!-- 	    <servlet-class>kr.or.ddit.board.controller.AnnController</servlet-class> -->
+<!-- 	</servlet> -->
+<!-- 	<servlet-mapping> -->
+<!--     	<servlet-name>announcement</servlet-name> -->
+<!--     	<url-pattern>/announcement</url-pattern> -->
+<!-- 	</servlet-mapping> -->
+
+<!-- 	<servlet> -->
+<!-- 	    <servlet-name>ProdListController</servlet-name> -->
+<!-- 	    <servlet-class>kr.or.ddit.prod.controller.ProdListController</servlet-class> -->
+<!-- 	</servlet> -->
+	
+<!-- 	<servlet-mapping> -->
+<!-- 	    <servlet-name>ProdListController</servlet-name> -->
+<!-- 	    <url-pattern>/prod/prodlist.do</url-pattern> -->
+<!-- 	</servlet-mapping> -->
+
+
+
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+  
+</web-app>

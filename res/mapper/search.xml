@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="search">
+
+
+		<!-- 회원 관리에서 회원 검색 -->
+	    <select id="searchMemAdmin" parameterType="String" resultType="kr.or.ddit.member.vo.MemberVo">
+		    SELECT *
+		    FROM member
+		    WHERE mem_name LIKE '%' || #{query} || '%'
+		       OR mem_id LIKE '%' || #{query} || '%'
+		       OR mem_pw LIKE '%' || #{query} || '%'
+		       OR mem_nick LIKE '%' || #{query} || '%'
+		       OR email LIKE '%' || #{query} || '%'
+		       OR phone LIKE '%' || #{query} || '%'
+		</select>
+
+		 <!-- 멤버 검색 -->
+	    <select id="searchMember" parameterType="String" resultType="kr.or.ddit.member.vo.MemberVo">
+		    SELECT *
+		    FROM member
+		    WHERE mem_name LIKE '%' || #{query} || '%'
+		       OR mem_id LIKE '%' || #{query} || '%'
+		       OR mem_nick LIKE '%' || #{query} || '%'
+			</select>
+	
+		<!-- 상품 검색 -->
+	    <select id="searchProd" parameterType="String" resultType="kr.or.ddit.prod.vo.ProdVo">
+			WITH RANKEDIMAGES AS (
+		    SELECT
+		        PI.PROD_NO,
+		        PI.PATH,
+		        PI.PROD_IMG_NO,
+		        ROW_NUMBER() OVER(PARTITION BY PI.PROD_NO ORDER BY PI.PROD_IMG_NO) AS RN
+		    FROM
+		        PROD_IMG PI
+			)
+			SELECT
+			    P.PROD_NO,
+			    SUBSTR(P.PROD_NAME, 1, 20) AS PROD_NAME,
+			    SUBSTR(P.PROD_DESCRIPTION, 1, 20) AS PROD_DESCRIPTION,
+			    PR.PROD_PRICE,
+			    CA.CATE_NAME,
+			    RI.PATH,
+			    RI.PROD_IMG_NO,
+			    P.PROD_CLICK_CNT
+			FROM
+			    PROD P
+			    JOIN PRICE PR ON P.PROD_NO = PR.PROD_NO
+			    JOIN CATEGORY CA ON P.CATE_NO = CA.CATE_NO
+			    LEFT JOIN RANKEDIMAGES RI ON P.PROD_NO = RI.PROD_NO
+			WHERE
+			    RI.RN = 1
+			    AND (P.PROD_NAME LIKE '%' || #{query} || '%' OR P.PROD_DESCRIPTION LIKE '%' || #{query} || '%')
+			GROUP BY
+			    P.PROD_NO,
+			    SUBSTR(P.PROD_NAME, 1, 20),
+			    SUBSTR(P.PROD_DESCRIPTION, 1, 20),
+			    PR.PROD_PRICE,
+			    CA.CATE_NAME,
+			    RI.PATH,
+			    RI.PROD_IMG_NO,
+			    P.PROD_CLICK_CNT
+		</select>
+	
+	
+		<!-- 상품 정렬 조건 -->
+		<!-- 가격 낮은 순 검색 쿼리 -->
+		<select id="searchProdByPriceAsc" parameterType="String" resultType="ProdVo">
+		    WITH RANKEDIMAGES AS (
+	        SELECT
+	          PI.PROD_NO,
+	          PI.PATH,
+	          PI.PROD_IMG_NO,
+	          ROW_NUMBER() OVER(PARTITION BY PI.PROD_NO ORDER BY PI.PROD_IMG_NO) AS RN
+	        FROM
+	          PROD_IMG PI
+		    )
+		    SELECT
+		      P.PROD_NO,
+		      SUBSTR(P.PROD_NAME, 1, 20) AS PROD_NAME,
+		      SUBSTR(P.PROD_DESCRIPTION, 1, 20) AS PROD_DESCRIPTION,
+		      PR.PROD_PRICE,
+		      CA.CATE_NAME,
+		      RI.PATH,
+		      RI.PROD_IMG_NO,
+		      P.PROD_CLICK_CNT
+		    FROM
+		      PROD P
+		      JOIN PRICE PR ON P.PROD_NO = PR.PROD_NO
+		      JOIN CATEGORY CA ON P.CATE_NO = CA.CATE_NO
+		      LEFT JOIN RANKEDIMAGES RI ON P.PROD_NO = RI.PROD_NO
+		    WHERE
+		      RI.RN = 1
+		      AND (P.PROD_NAME LIKE '%' || #{query} || '%'
+		       OR P.PROD_DESCRIPTION LIKE '%' || #{query} || '%')
+		    ORDER BY PR.PROD_PRICE ASC
+		</select>
+		
+		<!-- 가격 높은 순 검색 쿼리 -->
+		<select id="searchProdByPriceDesc" parameterType="String" resultType="ProdVo">
+		    WITH RANKEDIMAGES AS (
+	        SELECT
+	          PI.PROD_NO,
+	          PI.PATH,
+	          PI.PROD_IMG_NO,
+	          ROW_NUMBER() OVER(PARTITION BY PI.PROD_NO ORDER BY PI.PROD_IMG_NO) AS RN
+	        FROM
+	          PROD_IMG PI
+		    )
+		    SELECT
+		      P.PROD_NO,
+		      SUBSTR(P.PROD_NAME, 1, 20) AS PROD_NAME,
+		      SUBSTR(P.PROD_DESCRIPTION, 1, 20) AS PROD_DESCRIPTION,
+		      PR.PROD_PRICE,
+		      CA.CATE_NAME,
+		      RI.PATH,
+		      RI.PROD_IMG_NO,
+		      P.PROD_CLICK_CNT
+		    FROM
+		      PROD P
+		      JOIN PRICE PR ON P.PROD_NO = PR.PROD_NO
+		      JOIN CATEGORY CA ON P.CATE_NO = CA.CATE_NO
+		      LEFT JOIN RANKEDIMAGES RI ON P.PROD_NO = RI.PROD_NO
+		    WHERE
+		      RI.RN = 1
+		      AND (P.PROD_NAME LIKE '%' || #{query} || '%'
+		       OR P.PROD_DESCRIPTION LIKE '%' || #{query} || '%')
+		    ORDER BY PR.PROD_PRICE DESC
+		</select>
+		
+		<!-- 조회수 순 검색 쿼리 -->
+		<select id="searchProdByClicks" parameterType="String" resultType="ProdVo">
+		    WITH RANKEDIMAGES AS (
+		        SELECT
+		            PI.PROD_NO,
+		            PI.PATH,
+		            PI.PROD_IMG_NO,
+		            ROW_NUMBER() OVER(PARTITION BY PI.PROD_NO ORDER BY PI.PROD_IMG_NO) AS RN
+		        FROM
+		            PROD_IMG PI
+		    )
+		    SELECT
+		        P.PROD_NO,
+		        SUBSTR(P.PROD_NAME, 1, 20) AS PROD_NAME,
+		        SUBSTR(P.PROD_DESCRIPTION, 1, 20) AS PROD_DESCRIPTION,
+		        PR.PROD_PRICE,
+		        CA.CATE_NAME,
+		        RI.PATH,
+		        RI.PROD_IMG_NO,
+		        P.PROD_CLICK_CNT
+		    FROM
+		        PROD P
+		        JOIN PRICE PR ON P.PROD_NO = PR.PROD_NO
+		        JOIN CATEGORY CA ON P.CATE_NO = CA.CATE_NO
+		        LEFT JOIN RANKEDIMAGES RI ON P.PROD_NO = RI.PROD_NO
+		    WHERE
+		        RI.RN = 1
+		        AND (P.PROD_NAME LIKE '%' || #{query} || '%' OR P.PROD_DESCRIPTION LIKE '%' || #{query} || '%')
+		    ORDER BY P.PROD_CLICK_CNT DESC
+		</select>
+	
+		
+	    <!-- 집들이 게시글 검색 -->
+	    
+	    <select id="searchBoardByCode" parameterType="map" resultType="kr.or.ddit.board.vo.BoardVo">
+	    SELECT 
+            B.BOARD_NO, 
+            SUBSTR(B.TITLE, 1, 20) AS TITLE, 
+            B.CONTENT, 
+            B.MEM_NO, 
+            B.BOARD_CNT, 
+            B.DATE_OF_PRE, 
+            BC.BOARDCODE_NAME, 
+            M.MEM_NICK AS WRITER, 
+            BI.PATH AS path
+        FROM 
+            BOARD B
+        JOIN 
+            BOARD_CODE BC ON B.BOARDCODE_NO = BC.BOARDCODE_NO
+        JOIN 
+            MEMBER M ON B.MEM_NO = M.MEM_NO
+        LEFT JOIN 
+            BOARD_IMG BI ON B.BOARD_NO = BI.BOARD_NO
+        WHERE 
+            B.BOARDCODE_NO = 4
+            AND B.DEL_YN ='N'
+            AND (B.TITLE LIKE '%' || #{query} || '%' 
+                 OR B.CONTENT LIKE '%' || #{query} || '%')
+        ORDER BY 
+            B.DATE_OF_PRE DESC
+		</select>
+		
+		<!-- 집들이 게시글 정렬 조건 -->
+		<!-- 조회수 순 -->
+	    <select id="searchBoardByViews" parameterType="map" resultType="kr.or.ddit.board.vo.BoardVo">
+		    SELECT 
+	        b.BOARD_NO, 
+	        SUBSTR(b.TITLE, 1, 20) AS TITLE, 
+	        b.CONTENT, 
+	        b.MEM_NO, 
+	        b.BOARD_CNT, 
+	        b.DATE_OF_PRE, 
+	        bc.BOARDCODE_NAME, 
+	        m.MEM_NICK AS WRITER, 
+	        bi.PATH AS path
+	    FROM 
+	        board b
+	    JOIN 
+	        board_code bc ON b.boardcode_no = bc.boardcode_no
+	    JOIN 
+	        member m ON b.mem_no = m.mem_no
+	    LEFT JOIN 
+	        board_img bi ON b.board_no = bi.board_no
+	    WHERE 
+	        b.boardcode_no = 4
+	        AND b.DEL_YN = 'N'
+	        AND (b.title LIKE '%' || #{query} || '%' 
+	            OR b.content LIKE '%' || #{query} || '%')
+	    ORDER BY 
+	        b.board_cnt DESC
+		</select>
+		
+		<!-- 최신순 검색 -->
+	    <select id="searchBoardByLatest" parameterType="map" resultType="kr.or.ddit.board.vo.BoardVo">
+		    SELECT 
+	        b.BOARD_NO, 
+	        SUBSTR(b.TITLE, 1, 20) AS TITLE, 
+	        b.CONTENT, 
+	        b.MEM_NO, 
+	        b.BOARD_CNT, 
+	        b.DATE_OF_PRE, 
+	        bc.BOARDCODE_NAME, 
+	        m.MEM_NICK AS WRITER, 
+	        bi.PATH AS path
+	    FROM 
+	        board b
+	    JOIN 
+	        board_code bc ON b.boardcode_no = bc.boardcode_no
+	    JOIN 
+	        member m ON b.mem_no = m.mem_no
+	    LEFT JOIN 
+	        board_img bi ON b.board_no = bi.board_no
+	    WHERE 
+	        b.boardcode_no = 4
+	        AND b.DEL_YN = 'N'
+	        AND (b.title LIKE '%' || #{query} || '%' 
+	            OR b.content LIKE '%' || #{query} || '%')
+	    ORDER BY 
+	        b.date_of_pre DESC
+		</select>
+		
+</mapper>

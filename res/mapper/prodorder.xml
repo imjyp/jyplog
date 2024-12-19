@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProdOrderMapper">
+
+    <!-- 주문 상품 정보 삽입 -->
+    <insert id="insertProdOrder" parameterType="kr.or.ddit.order.vo.ProdOrderVo" useGeneratedKeys="true" keyProperty="prodOrderNo" keyColumn="PROD_ORDER_NO">
+        INSERT INTO PROD_ORDER (ORDER_NO, MEM_NO, PROD_NO, ORDER_CNT, ORDER_PRICE, ORDER_DATE, ORDER_STATUS, PROD_ORDER_NO)
+        VALUES (#{orderNo}, #{memNo}, #{prodNo}, #{orderCnt}, #{orderPrice}, 
+                #{orderDate, jdbcType=VARCHAR},  -- JdbcType 설정
+                #{orderStatus}, SEQ_PROD_ORDER_NO.NEXTVAL)
+    </insert>
+
+    <!-- 주문 상품 번호로 주문 상품 정보 조회 -->
+    <select id="selectProdOrder" resultType="kr.or.ddit.order.vo.ProdOrderVo" parameterType="int">
+        SELECT PROD_ORDER_NO, ORDER_NO, MEM_NO, PROD_NO, ORDER_CNT, ORDER_PRICE, ORDER_DATE, ORDER_STATUS
+        FROM PROD_ORDER
+        WHERE PROD_ORDER_NO = #{prodOrderNo}
+    </select>
+
+    <!-- 회원번호(memNo)로 가장 최근의 주문번호 조회 (Oracle SQL 문법 적용) -->
+    <select id="selectMostRecentOrderNoByMemNo" resultType="int" parameterType="int">
+        SELECT ORDER_NO 
+        FROM (
+            SELECT ORDER_NO 
+            FROM ORDERS 
+            WHERE MEM_NO = #{memNo}
+            ORDER BY ORDER_DATE DESC
+        )
+        WHERE ROWNUM = 1
+    </select>
+
+</mapper>

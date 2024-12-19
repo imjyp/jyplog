@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="prod">
+
+	<select id="prodManagementList" resultType="prodVo">
+		WITH RANKEDIMAGES AS (
+		SELECT
+		PI.PROD_NO,
+		PI.PATH,
+		PI.PROD_IMG_NO,
+		ROW_NUMBER()OVER(PARTITION BY PI.PROD_NO ORDER BY PI.PROD_IMG_NO) AS RN
+		FROM
+		PROD_IMG PI
+		)
+		SELECT
+		P.PROD_NO,
+        RI.PATH,
+		SUBSTR(P.PROD_NAME, 1, 20) AS PROD_NAME,
+        CA.CATE_NAME,
+		PR.PROD_PRICE,
+        P.PROD_CLICK_CNT
+        FROM
+		PROD P
+		JOIN PRICE PR ON
+		P.PROD_NO = PR.PROD_NO
+		JOIN
+		CATEGORY CA ON P.CATE_NO = CA.CATE_NO
+		LEFT JOIN RANKEDIMAGES RI ON
+		P.PROD_NO = RI.PROD_NO AND RI.RN = 1
+	</select>
+
+
+	<select id="prodCateList" resultType="prodVo">
+		SELECT CATE_NO,CATE_NAME
+		FROM CATEGORY
+	</select>
+
+	<select id="prodCate" resultType="prodVo" parameterType="int">
+		SELECT
+		CATE_NO,CATE_NAME
+		FROM CATEGORY
+		WHERE CATE_NO = #{cate_no}
+	</select>
+
+	<select id="prodList" resultType="prodVo" parameterType="prodVo">
+		WITH
+		RANKEDIMAGES AS (
+		SELECT
+		PI.PROD_NO,
+		PI.PATH,
+		PI.PROD_IMG_NO,
+		ROW_NUMBER()
+		OVER (PARTITION BY PI.PROD_NO ORDER BY PI.PROD_IMG_NO) AS RN
+		FROM
+		PROD_IMG PI
+		)
+		SELECT DISTINCT
+		P.PROD_NO,
+		SUBSTR(P.PROD_NAME, 1, 20) AS
+		PROD_NAME,
+		SUBSTR(P.PROD_DESCRIPTION, 1, 20) AS PROD_DESCRIPTION,
+		PR.PROD_PRICE,
+		CA.CATE_NAME,
+		RI.PATH,
+		RI.PROD_IMG_NO,
+		NVL(WL.WISH_STATE,
+		1) AS WISH_STATE
+		FROM
+		PROD P
+		JOIN PRICE PR ON P.PROD_NO = PR.PROD_NO
+		JOIN
+		CATEGORY CA ON P.CATE_NO = CA.CATE_NO
+		LEFT JOIN RANKEDIMAGES RI ON
+		P.PROD_NO = RI.PROD_NO
+		LEFT JOIN WISHLIST WL ON P.PROD_NO = WL.PROD_NO
+		AND WL.MEM_NO = #{mem_no}
+		WHERE
+		RI.RN = 1
+		AND P.CATE_NO = #{cate_no}
+
+	</select>
+
+
+	<select id="prodImages" resultType="prodImgVo"
+		parameterType="int">
+		SELECT PATH
+		FROM PROD_IMG
+		WHERE
+		PROD_NO = #{prod_no}
+	</select>
+
+	<select id="prodDetail" resultType="prodVo" parameterType="int">
+		SELECT
+		P.PROD_NO,
+		P.PROD_NAME,
+		P.PROD_CLICK_CNT,
+		P.PROD_DESCRIPTION,
+		PR.PROD_PRICE,
+		CA.CATE_NAME,
+		CA.CATE_NO
+		FROM
+		PROD P
+		JOIN PRICE PR ON
+		P.PROD_NO = PR.PROD_NO
+		JOIN
+		CATEGORY CA ON P.CATE_NO = CA.CATE_NO
+		WHERE
+		P.PROD_NO = #{prod_no}
+	</select>
+
+	<select id="prodOptions" resultType="prodOptionVo"
+		parameterType="int">
+		SELECT P.PROD_NO, PO.PROD_OPTION_DETAIL,
+		PO.PROD_OPTION_PRICE, PO.PROD_COLOR, PO.ADD_PROD_PRICE, PO.ADD_PROD_OPTION
+		FROM PROD P
+		JOIN
+		PROD_OPTION PO ON P.PROD_NO = PO.PROD_NO
+		WHERE P.PROD_NO = #{prod_no}
+	</select>
+
+
+	<select id="reviewList" resultType="reviewVo" parameterType="int">
+		SELECT R.RATING, R.CONTENT,
+		R.DATE_OF_PRE, M.MEM_NICK, R.REVIEW_NO, R.MEM_NO
+		FROM REVIEW R
+		JOIN PROD PR ON
+		R.PROD_NO = PR.PROD_NO
+		JOIN MEMBER M ON
+		R.MEM_NO = M.MEM_NO
+		WHERE PR.PROD_NO = #{prod_no}
+
+	</select>
+
+	<select id="recommendedProd" resultType="prodVo"
+		parameterType="int">
+		WITH
+		RANKEDIMAGES AS (
+		SELECT
+		PI.PROD_NO,
+		PI.PATH,
+		PI.PROD_IMG_NO,
+		ROW_NUMBER()
+		OVER(PARTITION BY PI.PROD_NO ORDER BY
+		PI.PROD_IMG_NO) AS RN
+		FROM
+		PROD_IMG PI
+		)
+		SELECT
+		P.PROD_NO,
+		SUBSTR(P.PROD_NAME, 1, 20) AS PROD_NAME,
+		SUBSTR(P.PROD_DESCRIPTION, 1,
+		20) AS PROD_DESCRIPTION,
+		PR.PROD_PRICE,
+		CA.CATE_NAME,
+		RI.PATH,
+		RI.PROD_IMG_NO
+		FROM
+		PROD P
+		JOIN PRICE PR ON
+		P.PROD_NO = PR.PROD_NO
+		JOIN
+		CATEGORY CA ON P.CATE_NO = CA.CATE_NO
+		LEFT
+		JOIN
+		RANKEDIMAGES RI ON
+		P.PROD_NO = RI.PROD_NO
+		WHERE
+		RI.RN = 1
+		AND
+		P.CATE_NO =#{cate_no}
+		GROUP BY
+		P.PROD_NO,
+		SUBSTR(P.PROD_NAME, 1, 20),
+		SUBSTR(P.PROD_DESCRIPTION, 1,
+		20),
+		PR.PROD_PRICE,
+		CA.CATE_NAME,
+		RI.PATH,
+		RI.PROD_IMG_NO
+
+	</select>
+
+	<select id="getProdClickCount" resultType="int"
+		parameterType="int">
+		SELECT PROD_CLICK_CNT
+		FROM PROD
+		WHERE PROD_NO =#{prod_no}
+	</select>
+
+	<update id="updateProdClickCount" parameterType="int">
+		UPDATE PROD
+		SET
+		PROD_CLICK_CNT = PROD_CLICK_CNT +1
+		WHERE PROD_NO =#{prod_no}
+	</update>
+
+
+
+	<insert id="insertProd" parameterType="prodVo">
+		INSERT INTO PROD (
+		PROD_NO,
+		PROD_NAME,
+		PROD_DESCRIPTION,
+		CATE_NO,
+		PROD_CLICK_CNT
+		) VALUES (
+		(SELECT NVL(MAX(PROD_NO), 0) + 1 FROM PROD),
+		#{prod_name},
+		#{prod_description},
+		#{cate_no},
+		0  <!-- 초기 클릭 수는 0으로 설정 -->
+		)
+	</insert>
+
+	<insert id="insertPrice" parameterType="prodVo">
+		INSERT INTO PRICE (
+		PROD_NO,
+		PROD_PRICE
+		) VALUES (
+		#{prod_no},
+		#{prod_price}
+		)
+	</insert>
+
+	<insert id="insertProdImage" parameterType="prodImgVo">
+		INSERT INTO PROD_IMG (
+		PROD_IMG_NO,
+		PROD_NO,
+		PATH
+		) VALUES (
+		(SELECT NVL(MAX(PROD_IMG_NO), 0) + 1 FROM PROD_IMG),
+		#{prod_no},
+		#{path}
+		)
+	</insert>
+
+	<insert id="insertProdOption" parameterType="prodOptionVo">
+		INSERT INTO PROD_OPTION (
+		PROD_OPTION_NO,
+		PROD_NO,
+		PROD_OPTION_DETAIL,
+		PROD_OPTION_PRICE,
+		PROD_COLOR,
+		ADD_PROD_PRICE
+		) VALUES (
+		(SELECT NVL(MAX(PROD_OPTION_NO), 0) + 1 FROM PROD_OPTION),
+		#{prod_no},
+		#{prod_option_detail},
+		#{prod_option_price},
+		#{prod_color},
+		#{add_prod_price}
+		)
+	</insert>
+	
+	<insert id="insertReview" parameterType="reviewVo">
+    INSERT INTO REVIEW (
+        REVIEW_NO,
+        PROD_NO,
+        MEM_NO,
+        RATING,
+        CONTENT,
+        DATE_OF_PRE
+    ) VALUES (
+        (SELECT NVL(MAX(REVIEW_NO), 0) + 1 FROM REVIEW),
+        #{prod_no},
+        #{mem_no},
+        #{rating},
+        #{content},
+        SYSDATE
+    )
+</insert>
+
+<update id="updateReview" parameterType="reviewVo">
+    UPDATE REVIEW
+    SET
+        RATING = #{rating},
+        CONTENT = #{content},
+        DATE_OF_PRE = SYSDATE
+    WHERE
+        REVIEW_NO = #{review_no}
+        AND MEM_NO = #{mem_no}
+</update>
+
+<delete id="deleteReview" parameterType="reviewVo">
+    DELETE FROM REVIEW
+    WHERE
+        REVIEW_NO = #{review_no}
+        AND MEM_NO = #{mem_no}
+</delete>
+
+<!-- 상품 검색 -->
+	    <select id="searchProd" parameterType="String" resultType="prodVo">
+			WITH RANKEDIMAGES AS (
+		    SELECT
+		        PI.PROD_NO,
+		        PI.PATH,
+		        PI.PROD_IMG_NO,
+		        ROW_NUMBER() OVER(PARTITION BY PI.PROD_NO ORDER BY PI.PROD_IMG_NO) AS RN
+		    FROM
+		        PROD_IMG PI
+			)
+			SELECT
+			    P.PROD_NO,
+			    SUBSTR(P.PROD_NAME, 1, 20) AS PROD_NAME,
+			    SUBSTR(P.PROD_DESCRIPTION, 1, 20) AS PROD_DESCRIPTION,
+			    PR.PROD_PRICE,
+			    CA.CATE_NAME,
+			    RI.PATH,
+			    RI.PROD_IMG_NO,
+			    P.PROD_CLICK_CNT
+			FROM
+			    PROD P
+			    JOIN PRICE PR ON P.PROD_NO = PR.PROD_NO
+			    JOIN CATEGORY CA ON P.CATE_NO = CA.CATE_NO
+			    LEFT JOIN RANKEDIMAGES RI ON P.PROD_NO = RI.PROD_NO
+			WHERE
+			    RI.RN = 1
+			GROUP BY
+			    P.PROD_NO,
+			    SUBSTR(P.PROD_NAME, 1, 20),
+			    SUBSTR(P.PROD_DESCRIPTION, 1, 20),
+			    PR.PROD_PRICE,
+			    CA.CATE_NAME,
+			    RI.PATH,
+			    RI.PROD_IMG_NO,
+			    P.PROD_CLICK_CNT
+		</select>
+		
+<!-- 		조회수 순 -->
+		<select id="searchProdClickCount" parameterType="String" resultType="prodVo">
+			WITH RANKEDIMAGES AS (
+		    SELECT
+		        PI.PROD_NO,
+		        PI.PATH,
+		        PI.PROD_IMG_NO,
+		        ROW_NUMBER() OVER(PARTITION BY PI.PROD_NO ORDER BY PI.PROD_IMG_NO) AS RN
+		    FROM
+		        PROD_IMG PI
+			)
+			SELECT
+			    P.PROD_NO,
+			    SUBSTR(P.PROD_NAME, 1, 20) AS PROD_NAME,
+			    SUBSTR(P.PROD_DESCRIPTION, 1, 20) AS PROD_DESCRIPTION,
+			    PR.PROD_PRICE,
+			    CA.CATE_NAME,
+			    RI.PATH,
+			    RI.PROD_IMG_NO,
+			    P.PROD_CLICK_CNT
+			FROM
+			    PROD P
+			    JOIN PRICE PR ON P.PROD_NO = PR.PROD_NO
+			    JOIN CATEGORY CA ON P.CATE_NO = CA.CATE_NO
+			    LEFT JOIN RANKEDIMAGES RI ON P.PROD_NO = RI.PROD_NO
+			WHERE
+			    RI.RN = 1
+			GROUP BY
+			    P.PROD_NO,
+			    SUBSTR(P.PROD_NAME, 1, 20),
+			    SUBSTR(P.PROD_DESCRIPTION, 1, 20),
+			    PR.PROD_PRICE,
+			    CA.CATE_NAME,
+			    RI.PATH,
+			    RI.PROD_IMG_NO,
+			    P.PROD_CLICK_CNT
+			 ORDER BY P.PROD_CLICK_CNT DESC
+		</select>
+		
+<!-- 		가격 낮은 순 -->
+		<select id="searchProdLowPrice" parameterType="String" resultType="prodVo">
+			WITH RANKEDIMAGES AS (
+		    SELECT
+		        PI.PROD_NO,
+		        PI.PATH,
+		        PI.PROD_IMG_NO,
+		        ROW_NUMBER() OVER(PARTITION BY PI.PROD_NO ORDER BY PI.PROD_IMG_NO) AS RN
+		    FROM
+		        PROD_IMG PI
+			)
+			SELECT
+			    P.PROD_NO,
+			    SUBSTR(P.PROD_NAME, 1, 20) AS PROD_NAME,
+			    SUBSTR(P.PROD_DESCRIPTION, 1, 20) AS PROD_DESCRIPTION,
+			    PR.PROD_PRICE,
+			    CA.CATE_NAME,
+			    RI.PATH,
+			    RI.PROD_IMG_NO,
+			    P.PROD_CLICK_CNT
+			FROM
+			    PROD P
+			    JOIN PRICE PR ON P.PROD_NO = PR.PROD_NO
+			    JOIN CATEGORY CA ON P.CATE_NO = CA.CATE_NO
+			    LEFT JOIN RANKEDIMAGES RI ON P.PROD_NO = RI.PROD_NO
+			WHERE
+			    RI.RN = 1
+			GROUP BY
+			    P.PROD_NO,
+			    SUBSTR(P.PROD_NAME, 1, 20),
+			    SUBSTR(P.PROD_DESCRIPTION, 1, 20),
+			    PR.PROD_PRICE,
+			    CA.CATE_NAME,
+			    RI.PATH,
+			    RI.PROD_IMG_NO,
+			    P.PROD_CLICK_CNT
+			 ORDER BY PR.PROD_PRICE ASC
+		</select>
+		
+<!-- 		가격 높은 순 -->
+		<select id="searchProdUpperPrice" parameterType="String" resultType="prodVo">
+			WITH RANKEDIMAGES AS (
+		    SELECT
+		        PI.PROD_NO,
+		        PI.PATH,
+		        PI.PROD_IMG_NO,
+		        ROW_NUMBER() OVER(PARTITION BY PI.PROD_NO ORDER BY PI.PROD_IMG_NO) AS RN
+		    FROM
+		        PROD_IMG PI
+			)
+			SELECT
+			    P.PROD_NO,
+			    SUBSTR(P.PROD_NAME, 1, 20) AS PROD_NAME,
+			    SUBSTR(P.PROD_DESCRIPTION, 1, 20) AS PROD_DESCRIPTION,
+			    PR.PROD_PRICE,
+			    CA.CATE_NAME,
+			    RI.PATH,
+			    RI.PROD_IMG_NO,
+			    P.PROD_CLICK_CNT
+			FROM
+			    PROD P
+			    JOIN PRICE PR ON P.PROD_NO = PR.PROD_NO
+			    JOIN CATEGORY CA ON P.CATE_NO = CA.CATE_NO
+			    LEFT JOIN RANKEDIMAGES RI ON P.PROD_NO = RI.PROD_NO
+			WHERE
+			    RI.RN = 1
+			GROUP BY
+			    P.PROD_NO,
+			    SUBSTR(P.PROD_NAME, 1, 20),
+			    SUBSTR(P.PROD_DESCRIPTION, 1, 20),
+			    PR.PROD_PRICE,
+			    CA.CATE_NAME,
+			    RI.PATH,
+			    RI.PROD_IMG_NO,
+			    P.PROD_CLICK_CNT
+			 ORDER BY PR.PROD_PRICE DESC
+		</select>
+
+
+	
+
+</mapper>
+
+	

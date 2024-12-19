@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="notification">
+
+	
+	<!-- 주문 알림 저장 -->
+    <insert id="insertOrderNotification">
+        INSERT INTO ORDER_NOTIFICATION (NOTIFICATION_ID, PROD_ORDER_NO, CONTENT, NOTIFICATION_DATE)
+        VALUES (#{notificationId}, #{prodOrderNo}, #{content}, SYSDATE)
+    </insert>
+
+    <!-- 게시글 알림 저장 -->
+    <insert id="insertBoardNotification">
+        INSERT INTO BOARD_NOTIFICATION (NOTIFICATION_ID, BOARD_NO, CONTENT, NOTIFICATION_DATE)
+        VALUES (#{notificationId}, #{boardNo}, #{content}, SYSDATE)
+    </insert>
+
+    <!-- 주문 알림 조회 -->
+    <select id="getOrderNotifications" resultType="kr.or.ddit.order.vo.ProdOrderVo">
+        SELECT PROD_ORDER_NO, CONTENT, NOTIFICATION_DATE
+        FROM ORDER_NOTIFICATION
+        ORDER BY NOTIFICATION_DATE DESC
+    </select>
+
+    <!-- 게시글 알림 조회 -->
+    <select id="getBoardNotifications" resultType="kr.or.ddit.board.vo.BoardVo">
+        SELECT BOARD_NO, CONTENT, NOTIFICATION_DATE
+        FROM BOARD_NOTIFICATION
+        ORDER BY NOTIFICATION_DATE DESC
+    </select>
+
+
+	
+</mapper>

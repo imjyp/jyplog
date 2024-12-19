@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wishlist">
+
+	<select id="isWishListExist" parameterType="wishListVo" resultType="wishListVo">
+	    SELECT * 
+	    FROM WISHLIST 
+	    WHERE MEM_NO = #{mem_no} 
+	    AND PROD_NO = #{prod_no}
+	</select>
+	
+	<select id="getWishListProdNos" resultType="int" parameterType="int">
+	    SELECT PROD_NO
+	    FROM WISHLIST
+	    WHERE MEM_NO = #{mem_no}
+	    AND WISH_STATE = 2  <!-- 위시리스트에 추가된 상태만 조회 -->
+	</select>
+
+	<select id="getWishList" resultType="wishListVo" parameterType="wishListVo">
+	    WITH
+	    RANKEDIMAGES AS (
+	        SELECT
+	        PI.PROD_NO,
+	        PI.PATH,
+	        PI.PROD_IMG_NO,
+	        ROW_NUMBER() OVER (PARTITION BY PI.PROD_NO ORDER BY PI.PROD_IMG_NO) AS RN
+	        FROM PROD_IMG PI
+	    )
+	    SELECT
+	    WL.WISHLIST_NO,
+	    WL.WISH_DATE,
+	    WL.WISH_STATE,
+	    M.MEM_NO,
+	    P.PROD_NO,
+	    P.PROD_NAME,
+	    RI.PATH AS PROD_PATH,
+	    PR.PROD_PRICE
+	    FROM WISHLIST WL
+	    JOIN MEMBER M ON WL.MEM_NO = M.MEM_NO
+	    JOIN PROD P ON WL.PROD_NO = P.PROD_NO
+	    LEFT JOIN RANKEDIMAGES RI ON P.PROD_NO = RI.PROD_NO
+	    JOIN PRICE PR ON P.PROD_NO = PR.PROD_NO
+	    WHERE M.MEM_NO = #{mem_no}
+	    AND WL.WISH_STATE = 2
+	    AND RI.RN = 1
+	</select>
+
+	<insert id="addWishList" parameterType="wishListVo">
+	    INSERT INTO WISHLIST (
+	        WISHLIST_NO,
+	        PROD_NO,
+	        MEM_NO,
+	        WISH_DATE,
+	        WISH_STATE
+	    ) VALUES (
+	        (SELECT NVL(MAX(WISHLIST_NO), 0) + 1 FROM WISHLIST),
+	        #{prod_no},
+	        #{mem_no},
+	        SYSDATE,
+	        2  <!-- 위시리스트 추가 상태 (2)로 설정 -->
+	    )
+	</insert>
+
+
+	<update id="updateWishListStateToRemove" parameterType="wishListVo">
+	    UPDATE WISHLIST
+	    SET WISH_STATE = 1  <!-- 위시리스트에서 제거된 상태 -->
+	    WHERE MEM_NO = #{mem_no} AND PROD_NO = #{prod_no}
+	</update>
+	
+	<update id="updateWishListStateToAdd" parameterType="wishListVo">
+	    UPDATE WISHLIST
+	    SET WISH_STATE = 2  <!-- 위시리스트에 추가된 상태 -->
+	    WHERE MEM_NO = #{mem_no} AND PROD_NO = #{prod_no}
+	</update>
+	
+	<delete id="deleteWishList" parameterType="wishListVo">
+	    DELETE FROM WISHLIST
+	    WHERE MEM_NO = #{mem_no}
+	    AND PROD_NO IN
+	    <foreach item="prod_no" collection="prodNos" open="(" separator="," close=")">
+	        #{prodNo}
+	    </foreach>
+	</delete>
+	
+	<update id="removeSelectedWishItems" parameterType="map">
+	    UPDATE WISHLIST
+	    SET WISH_STATE = 1  <!-- 위시리스트에서 제거된 상태로 변경 -->
+	    WHERE MEM_NO = #{mem_no}
+	    AND PROD_NO IN
+	    <foreach item="prodNo" collection="prodNos" open="(" separator="," close=")">
+	        #{prodNo}
+	    </foreach>
+	</update>
+	
+	
+
+
+
+</mapper>

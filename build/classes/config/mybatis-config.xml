@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+<properties resource="db.properties" />
+
+<typeAliases>
+    <typeAlias type="kr.or.ddit.member.vo.MemberVo" alias="memberVo"/>
+    <!-- <typeAlias type="kr.or.ddit.file.vo.AttachFileVo" alias="fileVo"/> -->
+    <typeAlias type="kr.or.ddit.board.vo.QABoardVo" alias="qABoardVo"/>
+    <typeAlias type="kr.or.ddit.board.vo.BoardVo" alias="boardVo"/>
+    <typeAlias type="kr.or.ddit.board.vo.AnswerVo" alias="answerVo"/>
+    <typeAlias type="kr.or.ddit.prod.vo.ProdVo" alias="prodVo"/>
+    <typeAlias type="kr.or.ddit.prod.vo.ProdImgVo" alias="prodImgVo"/>
+    <typeAlias type="kr.or.ddit.mypage.vo.ProfileVo" alias="profileVo"/>
+    <typeAlias type="kr.or.ddit.prod.vo.ProdOptionVo" alias="prodOptionVo"/>
+    <typeAlias type="kr.or.ddit.admin.vo.AdminVo" alias="adminVo"/>
+    <typeAlias type="kr.or.ddit.prod.vo.ProdReviewVo" alias="prodReviewVo"/>
+    <typeAlias type="kr.or.ddit.prod.vo.WishListVo" alias="wishListVo"/>
+    <typeAlias type="kr.or.ddit.order.vo.OrderDetailVo" alias="orderDetailVo"/> 
+    <typeAlias type="kr.or.ddit.prod.vo.ReviewVo" alias="reviewVo"/> 
+    
+    <typeAlias type="kr.or.ddit.order.vo.DelivVo" alias="delivVo"/> 
+    <typeAlias type="kr.or.ddit.order.vo.ProdOrderVo" alias="prodOrderVo"/> 
+    <typeAlias type="kr.or.ddit.order.vo.OrderVo" alias="orderVo"/> 
+    <typeAlias type="kr.or.ddit.order.vo.PayVo" alias="payVo"/> 
+    
+    <typeAlias type="kr.or.ddit.comment.vo.CommentVo" alias="commentVo"/>
+</typeAliases>
+
+	
+	<environments default="dev">
+		<environment id="dev">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}"/>
+				<property name="url" value="${url}"/>
+				<property name="username" value="${user}"/>
+				<property name="password" value="${password}"/>
+				<!-- 활성화된 최대 커넥션 수 -->
+				<property name="poolMaximumActiveConnections" value="5"/>
+				<!-- 유휴상태에서의  최대 커넥션 수 -->
+				<property name="poolMaximumIdleConnections" value="2"/>
+			</dataSource>
+		</environment>
+	</environments>
+	
+	
+	<mappers>
+		<mapper resource="mapper/qaboard.xml" />
+		<mapper resource="mapper/board.xml" />
+		<mapper resource="mapper/answerboard.xml" />
+		<mapper resource="mapper/ann.xml" />
+		<mapper resource="mapper/member.xml" />
+		<mapper resource="mapper/prod.xml"/>
+		<mapper resource="mapper/order.xml" />  
+        <mapper resource="mapper/deliv.xml" /> 
+        <mapper resource="mapper/search.xml"/>
+        <mapper resource="mapper/mypage.xml"/>
+        <mapper resource="mapper/admin.xml" />
+        <mapper resource="mapper/pay.xml" />
+        <mapper resource="mapper/prodorder.xml" />
+        <mapper resource="mapper/wishlist.xml" />
+		
+        <mapper resource="mapper/prodmanager.xml" />
+        <mapper resource="mapper/comment.xml" />
+	</mappers>
+
+</configuration>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mypage">
+
+	<!-- 게시글 가져오기 -->
+	<select id="selectMyPosts" parameterType="int" resultType="boardVo">
+        SELECT 
+		    B.BOARD_NO, 
+		    SUBSTR(B.TITLE, 1, 20) AS TITLE, 
+		    B.CONTENT, 
+		    B.MEM_NO, 
+		    B.BOARD_CNT, 
+		    B.DATE_OF_PRE, 
+		    BC.BOARDCODE_NAME, 
+		    M.MEM_NICK AS WRITER, 
+		    BI.PATH AS path
+		FROM 
+		    BOARD B
+		JOIN 
+		    BOARD_CODE BC ON B.BOARDCODE_NO = BC.BOARDCODE_NO
+		JOIN 
+		    MEMBER M ON B.MEM_NO = M.MEM_NO
+		LEFT JOIN 
+		    BOARD_IMG BI ON B.BOARD_NO = BI.BOARD_NO
+		WHERE 
+		    B.BOARDCODE_NO = 4
+		    AND B.DEL_YN ='N'
+		    AND B.MEM_NO = #{memNo}
+		ORDER BY 
+		    B.DATE_OF_PRE DESC
+    </select>
+    
+   
+  <!-- 비밀번호 확인 쿼리 -->
+    <select id="checkPassword" parameterType="kr.or.ddit.member.vo.MemberVo" resultType="int">
+        SELECT COUNT(*) 
+        FROM MEMBER 
+        WHERE MEM_ID = #{mem_id} 
+          AND MEM_PW = #{mem_pw}
+    </select>
+
+    <!-- 비밀번호 업데이트 쿼리 -->
+    <update id="updatePassword" parameterType="kr.or.ddit.member.vo.MemberVo">
+        UPDATE MEMBER 
+        SET MEM_PW = #{mem_pw} 
+        WHERE MEM_ID = #{mem_id}
+    </update>
+    
+    
+	 <!-- 회원 탈퇴 쿼리 (DEL_YN 업데이트) -->
+    <update id="updateMemberDelYn" parameterType="kr.or.ddit.member.vo.MemberVo">
+        UPDATE MEMBER 
+        SET DEL_YN = 2 
+        WHERE MEM_ID = #{mem_id}
+    </update>
+
+    <!-- 회원 삭제 쿼리 (DEL_YN 설정) -->
+    <update id="deleteMember" parameterType="int">
+        UPDATE MEMBER
+        SET DEL_YN = 2
+        WHERE MEM_NO = #{memNo}
+    </update>
+    
+<!--     <update id="mypage.updateMemberInfo" parameterType="kr.or.ddit.member.vo.MemberVo"> -->
+<!--     UPDATE MEMBER -->
+<!--     SET MEM_NAME = #{mem_name}, -->
+<!--         MEM_NICK = #{mem_nick}, -->
+<!--         EMAIL = #{email}, -->
+<!--         PHONE = #{phone} -->
+<!--     WHERE MEM_ID = #{mem_id} -->
+<!-- </update> -->
+
+<update id="updateMemberInfo" parameterType="kr.or.ddit.member.vo.MemberVo">
+    UPDATE MEMBER
+    SET MEM_NAME = #{mem_name},
+        MEM_NICK = #{mem_nick},
+        EMAIL = #{email},
+        PHONE = #{phone}
+    WHERE MEM_ID = #{mem_id}
+</update>
+
+	<!-- 회원 정보 조회 쿼리 -->
+	<select id="getMemberInfo" parameterType="String" resultType="kr.or.ddit.member.vo.MemberVo">
+	    SELECT MEM_NO, MEM_ID, MEM_NAME, MEM_NICK, EMAIL, PHONE, DEL_YN
+	    FROM MEMBER
+	    WHERE MEM_ID = #{mem_id}
+	</select>
+	
+	<select id="isFollowing" parameterType="map" resultType="int">
+    SELECT CASE 
+               WHEN COUNT(*) > 0 THEN 1 
+               ELSE 0 
+           END 
+    FROM FOLLOW
+    WHERE FOLLOWER_NO = #{followerNo} 
+    AND FOLLOWING_NO = #{followingNo}
+</select>
+
+</mapper>

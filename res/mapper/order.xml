@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrderMapper">
+
+   <insert id="insertOrder" useGeneratedKeys="true" keyProperty="order_no" keyColumn="ORDER_NO">
+    INSERT INTO team1_202407M.ORDERS
+    (ORDER_NO, MEM_NO, DELIV_NO, ORDER_PRICE, ORDER_DATE, ORDER_STAT, TOTAL_PRICE)
+    VALUES (SEQ_ORDER_NO.NEXTVAL, #{mem_no}, #{deliv_no}, #{order_price}, SYSDATE, #{order_stat}, #{total_price})
+</insert>
+
+
+    <!-- 주문 조회 -->
+    <select id="getOrder" parameterType="int" resultType="kr.or.ddit.order.vo.OrderVo">
+        SELECT ORDER_NO as ORDER_NO, MEM_NO as MEM_NO, DELIV_NO as DELIV_NO, ORDER_PRICE as ORDER_PRICE,
+               ORDER_DATE as ORDER_DATE, ORDER_STAT as ORDER_STAT, TOTAL_PRICE as TOTAL_PRICE
+        FROM team1_202407M.ORDERS
+        WHERE ORDER_NO = #{order_no}
+    </select>
+
+    <!-- 모든 주문 조회 -->
+    <select id="getAllOrders" parameterType="int" resultType="kr.or.ddit.order.vo.OrderVo">
+        SELECT ORDER_NO as ORDER_NO, MEM_NO as MEM_NO, DELIV_NO as DELIV_NO, ORDER_PRICE as ORDER_PRICE,
+               ORDER_DATE as ORDER_DATE, ORDER_STAT as ORDER_STAT, TOTAL_PRICE as TOTAL_PRICE
+        FROM team1_202407M.ORDERS
+        WHERE MEM_NO = #{mem_no}
+    </select>
+
+    <!-- 주문 상태 '주문 취소'로 업데이트 -->
+    <update id="updateOrderToCancel">
+        UPDATE team1_202407M.ORDERS
+        SET ORDER_STAT = '주문 취소'
+        WHERE ORDER_NO = #{order_no}
+    </update>
+
+    <!-- 주문 취소 내역 삽입 (ORDER_CANCEL 테이블) -->
+    <insert id="insertOrderCancel">
+        INSERT INTO team1_202407M.ORDER_CANCEL
+        (ORDER_NO, CANCEL_DATE, CANCEL_AMOUNT)
+        VALUES (#{order_no}, SYSDATE, #{cancel_amount})
+    </insert>
+
+<!-- 주문 내역 조회 -->
+<select id="getOrderHistory" parameterType="int" resultType="kr.or.ddit.order.vo.OrderDetailVo">
+   SELECT
+    po.PROD_ORDER_NO as PROD_ORDER_NO,
+    po.ORDER_NO as ORDER_NO,
+    po.MEM_NO as MEM_NO,
+    po.PROD_NO as PROD_NO,
+    po.ORDER_CNT as ORDER_CNT,
+    po.ORDER_PRICE as ORDER_PRICE,
+    po.ORDER_DATE as ORDER_DATE,
+    o.ORDER_STAT as ORDER_STAT,   -- ORDERS 테이블에서 ORDER_STAT 가져옴
+    p.PROD_NAME as PROD_NAME,       
+    pi.PATH as PATH                 
+FROM team1_202407M.PROD_ORDER po
+JOIN team1_202407M.PROD p ON po.PROD_NO = p.PROD_NO
+JOIN team1_202407M.ORDERS o ON po.ORDER_NO = o.ORDER_NO  -- ORDERS 테이블과 조인
+LEFT JOIN team1_202407M.PROD_IMG pi ON p.PROD_NO = pi.PROD_NO  
+WHERE po.MEM_NO = #{mem_no}
+AND o.ORDER_STAT = '주문완료'  
+ORDER BY po.ORDER_DATE DESC
+
+</select>
+
+
+<update id="updateOrder" parameterType="kr.or.ddit.order.vo.OrderVo">
+    UPDATE ORDERS
+    SET ORDER_STAT = #{order_stat}
+    WHERE ORDER_NO = #{order_no}
+</update>
+
+
+</mapper>

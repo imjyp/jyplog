@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">
+
+
+	<select id="getMemberList" resultType="kr.or.ddit.member.vo.MemberVo">
+        SELECT *
+        FROM MEMBER
+    </select>
+    
+	<select id="checkIdExists" parameterType="String" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM MEMBER 
+	    WHERE MEM_ID = #{mem_id}
+	</select>
+	
+	<select id="checkNickExists" parameterType="String" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM MEMBER 
+	    WHERE MEM_NICK = #{mem_nick}
+	</select>
+
+	<!-- 임시 비밀번호 업데이트 -->
+    <update id="updateTempPw" parameterType="MemberVo">
+        UPDATE MEMBER
+        SET MEM_PW = #{mem_pw}
+        WHERE MEM_ID = #{mem_id}
+    </update>
+    
+	<!-- 비밀번호 변경 -->
+<!-- 	<update id="updatePassword" parameterType="map"> -->
+<!-- 	    UPDATE MEMBER -->
+<!-- 	    SET MEM_PW = #{mem_pw} -->
+<!-- 	    WHERE MEM_ID = #{mem_id} -->
+<!-- 	</update> -->
+
+	<select id="chkMemberInfo" resultType="MemberVo" parameterType="MemberVo" >
+		SELECT *
+		FROM MEMBER
+		WHERE MEM_ID = #{mem_id}
+		AND MEM_NAME = #{mem_name}
+		AND PHONE = #{phone}
+	</select>
+	
+
+	<select id="findId" resultType="string" parameterType="MemberVo">
+		SELECT MEM_ID
+		FROM MEMBER
+		WHERE MEM_NAME = #{mem_name}
+		AND PHONE = #{phone}
+	</select>
+
+<select id="login" resultType="MemberVo" parameterType="MemberVo">
+    SELECT *
+    FROM MEMBER
+    WHERE MEM_ID = #{mem_id, jdbcType=VARCHAR}
+    AND MEM_PW = #{mem_pw, jdbcType=VARCHAR}
+	AND del_yn = 1
+</select>
+
+
+	<select id="getMaxMemNo" resultType="int">
+		SELECT NVL(MAX(MEM_NO), 0)
+		+1
+		FROM MEMBER
+	</select>
+
+	<insert id="insertMember" parameterType="MemberVo">
+		INSERT INTO MEMBER 
+		VALUES( MEMBER_SEQ.NEXTVAL,
+		#{mem_name}, #{mem_id}, #{mem_pw}, #{email}, #{phone}, #{mem_nick, jdbcType=VARCHAR}, '1', sysdate, '1', '0', '0'
+		)
+	</insert>
+	
+<!-- 	탈퇴 회원 여부 확인 -->
+	<select id="isWithdrawnMember" parameterType="String" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM MEMBER 
+	    WHERE MEM_ID = #{mem_id} 
+	      AND DEL_YN = 2
+	</select>
+	
+
+	
+</mapper>

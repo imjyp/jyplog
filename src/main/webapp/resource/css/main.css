@@ -1,0 +1,970 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400&display=swap');
+
+
+
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   font-family: "Noto Sans KR","roboto" !important;
+}
+
+.body {
+   margin: 0 auto;
+}
+
+body {
+   background-color: #ffffff;
+   color: #333;
+}
+
+a {
+   font-size: 20px;
+   text-decoration: none;
+   color: inherit;
+}
+  body, ul, li, h1 {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+/* 부모 요소 */
+
+
+/* 배너 슬라이더 */
+.slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+}
+
+/* 슬라이드 개별 스타일 */
+/* 부모 요소 (1500px max-width) */
+.slider-container {
+    width: 100%;
+    max-width: 2200px; /* 부모 요소는 최대 1500px */
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden; /* 부모 요소가 슬라이드를 넘어서 확장되는 것을 숨김 */
+}
+
+/* 슬라이더 (슬라이드만 1900px) */
+.slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    /*width: 1900px;*/ /* 슬라이드가 부모보다 넓어지도록 고정 */
+   /* margin-left: -200px;*/ /* 슬라이드가 부모보다 넓어지므로, 가운데 맞추기 위해 왼쪽으로 이동 */
+}
+
+/* 슬라이드 개별 스타일 */
+.slide {
+    flex: 0 0 100%; /* 슬라이드가 부모의 100% 크기만큼 채움 */
+    box-sizing: border-box;
+}
+
+/* 슬라이드 이미지 스타일 */
+.slide img {
+    width: 100%;
+    height: 600px;
+    object-fit: cover;
+}
+
+/* 슬라이드 이동 버튼 */
+.prev-btn, .next-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #8e8d8d;
+    border: none;
+    height: 40px;
+    cursor: pointer;
+    font-size: 25px;
+    z-index: 100;
+    width: 40px;
+    border-radius: 5px;
+}
+
+.prev-btn {
+    left: 10px;
+}
+
+.next-btn {
+    right: 10px;
+}
+
+footer {
+    position: relative; /* 고정 위치 */
+    left: 0; /* 왼쪽 끝에 정렬 */
+    bottom: 0; /* 하단에 정렬 */
+    width: 100%; /* 전체 너비 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    padding: 10px; /* 여백 */
+        z-index: 100;
+        margin-top: 10px;
+        height: 100px;
+    }
+
+footer>p {
+   padding: 30px;
+   text-align: center;
+   font-size: 12px;
+}
+.mainmenu{
+       position: relative;
+    width: 1590px;
+  margin: 0 auto;
+    z-index: 200;
+}
+.menu{
+    left: 50%; /* 화면의 50% 위치로 이동 */
+    transform: translateX(-50%);
+   position: fixed;
+   width: 2200px;
+   background-color: rgb(255, 255, 255);
+      margin: 0 auto;
+    z-index: 200;
+   border-bottom: 1px solid #ddd;
+   z-index: 500;
+}
+.topmnbox{
+   height: 80px;
+}
+/* 헤더 스타일 */
+.header {
+   
+   display: flex;
+   justify-content: space-between;
+   /*align-items: center;*/
+   padding: 10px 20px;
+   padding-top: 15px;
+   padding-bottom: 15px;
+   background-color: #fff;
+   
+}
+
+.logo>img{
+   width: 50px;
+}
+
+.header-left {
+   display: flex;
+   align-items: center;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px; /* 이미지와 버튼 사이의 간격 설정 */
+}
+
+.header-right img {
+    max-width:25px;  /* 원하는 너비 설정 */
+    height: auto;  /* 비율에 맞춰 자동으로 높이 조정 */
+    margin-right: 20px;
+   
+}
+
+.nav-menu ul {
+   display: flex;
+   list-style: none;
+}
+
+.nav-menu ul li {
+   margin-right: 30px;
+}
+
+.nav-menu ul li a {
+   text-decoration: none;
+   color: rgb(0, 0, 0);
+   font-size: 1.3rem;
+   font-weight: 400 ;
+}
+
+.nav-menu ul li a:focus {
+   font-weight: 500;
+   color: rgb(253, 78, 2);
+}
+
+.logo {
+   font-weight: 400;
+   font-size: 27px !important;
+   color: #323232 !important;
+   padding-bottom: 3px;
+}
+
+.logo:focus {
+   color: black;
+}
+
+.header-center {
+   display: flex;
+   align-items: center;
+}
+.sbt{
+       position: absolute;
+    left: 51.4%;
+    border-radius: 90%;
+    padding: 6px 6px;
+    border: none;
+     background-color: white; 
+    color: #080808;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    margin-left: 10px;
+   
+}
+.sbt:focus{
+   background-color: 
+rgb(253, 78, 2) !important;
+color:white;
+   
+}
+
+.search-bar {
+   position:relative !important; 
+   padding: 8px;
+   width: 300px;
+   border: 1px solid #ddd;
+   border-radius: 3px;
+}
+
+.header-right button {
+   padding: 6px 10px;
+   border: none;
+   background-color: 
+rgb(253, 78, 2);
+   color: white;
+   border-radius: 3px;
+   cursor: pointer;
+   font-size: 1rem;
+}
+
+.btnone {
+   background-color: inherit !important;
+   color: black !important;
+}
+
+/* 서브 메뉴 스타일 */
+.sub-menu {
+   display: flex;
+   justify-content: flex-start;
+   padding: 20px;
+   padding-left: 20px;
+   background-color: #ffffff;
+   max-width: 1590px;
+   margin: 0 auto;
+}
+
+.sub-menu ul {
+   display: flex;
+   list-style: none;
+}
+
+.sub-menu ul li {
+   margin-right: 20px;
+}
+
+.sub-menu ul li a {
+   text-decoration: none;
+   color: rgb(44, 45, 50);
+   font-size: 1.1rem;
+   font-weight: 400;
+}
+.sub-menu>ul>li>a:focus{
+
+color:rgb(253, 78, 2);
+font-weight: 500 !important;
+
+
+}
+.smenu{
+      border-bottom: 1px solid #ddd;
+
+}
+
+
+
+/* 메인 배너 섹션 */
+.main-banner {
+   display: flex;
+   padding: 20px;
+   background-color: #fff;
+}
+
+
+/*.slider-container::after {
+   content: "10년 간의 꾸준한 스타일링, 정교해지는 취향의 아카이빙✨";
+   position: absolute;
+   bottom: 25px;
+   left: 25px;
+   color: #fff;
+   font-size: 1.2rem;
+   background: rgba(0, 0, 0, 0.5);
+   padding: 5px 10px;
+   border-radius: 5px;
+}*/
+
+.side-ad {
+   flex: 1;
+   margin-left: 20px;
+   background-color: black;
+   padding: 20px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   border-radius: 8px;
+}
+
+.side-ad h3 {
+   margin-bottom: 10px;
+   font-size: 1.1rem;
+   color: white;
+}
+
+.side-ad p {
+   text-align: center;
+   font-size: 0.9rem;
+   color: white;
+}
+
+/* 아이콘 메뉴 섹션 */
+.icon-menu {
+   display: flex;
+   justify-content: space-around;
+   background-color: #fff;
+   padding: 20px 0;
+   border-top: 1px solid #ddd;
+   border-bottom: 1px solid #ddd;
+}
+
+.icon-item {
+   text-align: center;
+   color: #333;
+}
+
+.icon-item img {
+   width: 50px;
+   height: 50px;
+   margin-bottom: 5px;
+}
+
+.icon-item p {
+   font-size: 0.8rem;
+}
+
+/* 인기 게시글 섹션 */
+/*.popular-posts {
+   padding: 20px;
+   background-color: #fff;
+   margin-top: 20px;
+   max-width: 1590px;
+   margin:0 auto !important;
+}
+
+.popular-posts>h2 {
+   margin-bottom: 15px;
+   font-size: 20px;
+}
+
+.post-items {
+   display: flex;
+   overflow-x: auto;
+   gap: 10px;
+   height: 200px;
+}
+
+.post-item {
+   flex: 0 0 250px;
+   background-color: #eee;
+   border-radius: 5px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   font-size: 0.9rem;
+   color: #333;
+}
+.post-item> a> img{
+   border-radius: 20px !important;
+   width: 100%;
+   
+}
+*/
+
+/* 섹션 구분선 */
+.section-divider {
+   height: 1px;
+   background-color: #e8e8e8;
+}
+
+/* 광고 및 추천 섹션 */
+.ads-section {
+   display: flex;
+   flex-direction: column;
+   padding: 20px;
+   background-color: #fff;
+   margin-top: 20px;
+}
+
+.ad-banner {
+   width: 100%;
+   height: 100px;
+   background-color: #ddd;
+   margin-bottom: 10px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   color: #666;
+}
+
+.top-header {
+   width: 100%;
+   max-width: 1200px;
+   background-color: #f8f9fa;
+   border-bottom: 1px solid #e0e0e0;
+   padding: 10px 20px;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   font-size: 14px;
+   box-sizing: border-box;
+}
+
+.top-header nav {
+   display: flex;
+   gap: 15px;
+}
+
+.top-header a {
+   color: #555;
+   text-decoration: none;
+}
+
+.top-header a:hover {
+   color: #000;
+}
+
+.main-wrapper {
+   display: flex;
+   justify-content: center;
+   width: 100%;
+   max-width: 1200px;
+   padding: 20px;
+   box-sizing: border-box;
+}
+
+.container {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: space-between;
+   gap: 20px;
+   width: 100%;
+}
+
+.item {
+   background-color: #fff;
+   border: 1px solid #e0e0e0;
+   border-radius: 8px;
+   overflow: hidden;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+   transition: box-shadow 0.3s ease;
+   width: calc(33.33% - 20px);
+   text-align: center;
+}
+
+.item:hover {
+   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.item img {
+   width: 100%;
+   height: 180px;
+   object-fit: cover;
+}
+
+.item-info {
+   padding: 10px 15px;
+   border-top: 1px solid #f0f0f0;
+}
+
+.item-title {
+   font-size: 13px;
+   font-weight: bold;
+   margin-bottom: 5px;
+   color: #333;
+}
+
+.item-description {
+   font-size: 12px;
+   color: #888;
+}
+
+.item-price {
+   font-size: 12px;
+   color: #ff5722;
+   margin-top: 5px;
+}
+
+/* 오늘의 딜 섹션 */
+.deals-section {
+   max-width:1590px;
+   margin:0 auto !important;
+}
+
+.deals-section>h2 {
+   font-size: 20px;
+   margin-bottom: 15px;
+}
+
+.deals-container {
+   display: flex;
+   gap: 10px;
+   
+   justify-content: space-between;
+   flex-wrap: wrap;
+   margin-bottom:300px ;
+}
+
+
+.deal-item {
+   width: calc(20% - 10px);
+   border-radius: 8px;
+   text-align: left;
+   
+   display: flex;
+   flex-direction: column;
+   overflow: hidden;
+   position: relative;
+}
+
+.deal-item >a>img {
+   width: 368px;
+   height: 368px;
+   object-fit: cover;
+   border-radius: 5px;
+}
+
+.brand {
+   font-size: 12px;
+   color: #777;
+   margin-bottom: 5px;
+}
+
+.description {
+   font-size: 14px;
+   color: #333;
+   line-height: 1.4;
+   margin-bottom: 10px;
+}
+
+.price {
+   font-size: 16px;
+   color: rgb(0, 0, 0);
+   font-weight: bold;
+   margin-bottom: 5px;
+}
+
+.rating {
+   color: rgb(253, 78, 2);
+   margin-top: 5px;
+   font-size: 12px;
+   display: flex;
+   align-items: center;
+}
+
+.rating span {
+   margin-left: 5px;
+   color: #555;
+}
+
+.tags {
+   display: flex;
+   gap: 5px;
+   margin-top: 5px;
+}
+
+.special {
+   background-color: #f03e3e;
+   color: white;
+   padding: 3px 8px;
+   border-radius: 5px;
+   font-size: 12px;
+}
+.header-right {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px; /* 이미지와 버튼 사이의 간격 조정 */
+}
+
+.nav-menu ul li {
+    margin-right: 15px; /* 메뉴 항목 간의 간격 조정 */
+}
+
+.write {
+    display: inline-flex;
+    position: relative;
+}
+
+/* 드롭다운 메뉴 */
+.writedropdown-menu {
+    position: absolute;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    width: 150px; /* 너비 조정 */
+    left: 20px;
+    top: 35px; /* 글쓰기 버튼 아래에 위치 */
+    display: none;
+    padding: 0; /* 여백 제거 */
+}
+.dropdown-menu {
+    position: absolute;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    
+    left: -20px;
+    width: 120px; /* 너비 조정 */
+  
+    display: none;
+    padding: 0; /* 여백 제거 */
+}
+
+
+.writedropdown-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.dropdown-menu ul{
+   list-style: none;
+    padding: 0;
+    margin: 0;
+   
+}
+#writeButton:focus{
+   background-color: rgb(253, 78, 2);
+}
+
+.writedropdown-menu ul li {
+    padding: 8px 10px; /* 패딩 간격 조정 */
+}
+.dropdown-menu ul li{
+    padding: 8px 10px; /* 패딩 간격 조정 */
+}
+
+.writedropdown-menu ul li a {
+    color: #333;
+    text-decoration: none;
+    font-size: 13px;
+}
+.dropdown-menu ul li a{
+       color: #333;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+
+
+.writedropdown-menu ul li:hover {
+    background-color: #f0f0f0; /* hover 시 강조 */
+}
+
+.dropdown-menu ul li:hover {
+    background-color: #f0f0f0; /* hover 시 강조 */
+}
+
+/* 회원 아이디 드롭다운 */
+#userDropdownMenu {
+    position: absolute;
+    top: 30px; /* 회원 아이디 아래에 위치 */
+    right: 0;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1000;
+    display: none;
+    width: 150px;
+}
+
+#writeDropdown {
+    top: 35px; /* 글쓰기 버튼 밑에 위치 */
+    left: 0;
+}
+
+ /* 회원 아이디 영역 */
+.id {
+    cursor: pointer;
+    display: inline-block;
+    padding: 5px 10px;
+    position: relative; /* 드롭다운의 기준 위치가 됨 */
+}
+    
+.admin-button {
+    text-decoration: underline; /* 밑줄 추가 */
+    color:rgb(253, 78, 2); /* 링크 색상 (필요에 따라 조정) */
+}
+    
+.write{
+   display:inline-flex;
+   position: relative;
+   
+}
+.write>a{
+   box-sizing: content-box !important;
+}
+
+/* 알림 아이콘 컨테이너 스타일 */
+.notification-icon {
+    position: relative; /* 배지를 위치시키기 위한 기준 */
+    display: inline-block;
+}
+
+/* 알림 배지 스타일 */
+.notification-badge {
+    position: absolute;
+    top: -10px;  /* 아이콘 위로 이동 */
+    left: -5px;  /* 왼쪽으로 이동 */
+    background-color: #323232;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    
+}
+.notification-icon>img{
+   padding-top:4px ;
+}
+   
+.banner-image>a>img{
+   display: block;
+   
+    width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px; 
+   
+}
+.dsbox{
+   height: 90vh;
+   padding: 50px;
+   
+   margin-top: 50px;
+   background-color: rgb(255, 252, 247);
+}
+.mainspp{
+   max-width: 1590px;
+   margin:0 auto;
+}
+.wishlist-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #ff6666; /* 기본 색상 */
+    transition: color 0.3s ease;
+    display: flex; /* 중앙 정렬을 위한 flexbox */
+    align-items: center; /* 수직 가운데 정렬 */
+    justify-content: center; /* 수평 가운데 정렬 */
+    width: 100%; /* 부모 요소에서 너비를 채우게 설정 */
+}
+
+.wishlist-btn:hover {
+    color: rgb(253, 78, 2); /* 호버 시 색상 변경 */
+}
+
+.wishlist-btn .wished {
+    filter: grayscale(0);  /* 위시리스트에 추가된 상태 */
+}
+
+.wishlist-btn img {
+    width: 24px;
+    height: 24px;
+    filter: grayscale(100%);  /* 위시리스트에 추가되지 않은 상태 */
+}
+
+.wishlist-btn:hover img {
+    filter: grayscale(0);  /* 호버 시 색상을 표시 */
+}
+
+.recommended-grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+   gap: 20px;
+}
+
+.recommended-item {
+   background-color: #fff;
+   padding: 15px;
+   border-radius: 8px;
+   
+   text-align: left; /* 왼쪽 정렬 */
+   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+   transition: box-shadow 0.3s ease;
+}
+
+.recommended-item:hover {
+   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.recommended-item img {
+   width: 100%;
+   height: auto;
+   border-radius: 5px;
+}
+
+.recommended-name {
+   font-size: 16px;
+   margin: 10px 0;
+   font-weight: bold;
+   color: #333;
+}
+
+.recommended-price {
+   font-size: 18px;
+   font-weight: bold;
+   color: rgb(253, 78, 2);
+   margin: 5px 0;
+}
+.review-section {
+   height: auto;
+   padding: 100px 0px 100px 0px !important;
+   max-width: 1300px;
+   margin: 0 auto;
+}
+
+.review-summary {
+   
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 30px;
+}
+
+.review-actions {
+   margin-top: 10px;
+}
+
+.review-actions button {
+   padding: 10px;
+   border: none;
+   outline: none;
+   background-color: rgb(253, 78, 2);
+   color: white;
+   border-radius: 5px;
+}
+
+.reviewUpdateBtn {
+   padding: 10px;
+   border: none;
+   outline: none;
+   background-color: rgb(253, 78, 2);
+   color: white;
+   border-radius: 5px;
+}
+
+.review-actions button:hover {
+   background-color: #1d9bd1;
+}
+
+
+.smenu {
+   margin: 0 auto;
+}
+
+.prod-mcontent {
+   max-width: 1300px !important;
+   margin:0 auto;
+}
+ .btn-group {
+            margin-top: 30px;
+            margin:0 auto;
+        }
+        
+.srbox{
+background-color: #f3f3f3;
+width: 60%;
+height: 100px;
+border-radius: 10px;
+padding: 20px 0px 50px 30px;
+margin-bottom: 10px;
+
+}    
+.rvupload{
+   padding: 10px;
+   border: none;
+   outline: none;
+   background-color: rgb(253, 78, 2);
+   color: white;
+   border-radius: 5px;
+   
+}
+.review-item{
+   width: 60%;
+padding:20px 0px 30px 0px;
+margin-top:1%;
+border-bottom: 1px solid  rgb(206, 206, 217);
+
+
+}  
+.rvupload{
+   margin-bottom: 3%;
+   
+   
+   
+}
+.rcbox{
+width:60%;
+height: 40px;
+border-radius: 10px;
+outline: none;
+border: none;
+border: 1px solid rgb(206, 206, 217);
+} 
+        
+.rvupload{
+	padding: 10px;
+	border: none;
+	outline: none;
+	background-color: rgb(253, 78, 2);
+	color: white;
+	border-radius: 5px;
+	
+}
+.review-item{
+	width: 60%;
+padding:20px 0px 30px 0px;
+margin-top:1%;
+border-bottom: 1px solid  rgb(206, 206, 217);
+
+
+}  
+.rvupload{
+	margin-bottom: 3%;
+	
+	
+	
+}
+.rcbox{
+width:60%;
+height: 40px;
+border-radius: 10px;
+outline: none;
+border: none;
+border: 1px solid rgb(206, 206, 217);
+} 
+        
+

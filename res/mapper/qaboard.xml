@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="qaboard">
+
+	<resultMap id="QABoardResultMap" type="qABoardVo">
+	    <result property="question_no" column="QUESTION_NO"/>
+	    <result property="question_title" column="QUESTION_TITLE"/>
+	    <result property="question_content" column="QUESTION_CONTENT"/>
+	    <result property="question_date" column="QUESTION_DATE"/>
+	    <result property="mem_no" column="MEM_NO"/>
+	    <result property="mem_id" column="MEM_ID"/>
+	    
+	    <!-- 답변 관련 필드 -->
+	    <result property="answer_no" column="ANSWER_NO"/>
+	    <result property="answer_title" column="ANSWER_TITLE"/>
+	    <result property="answer_content" column="ANSWER_CONTENT"/>
+	    <result property="answer_date" column="ANSWER_DATE"/>
+	    
+		<!-- 관리자 관련 필드 -->
+		<result property="admin_nick" column="ADMIN_NICK"/>
+	</resultMap>
+
+	<select id="getAllQuestions" resultMap="QABoardResultMap">
+         SELECT Q.QUESTION_NO,
+               Q.TITLE AS QUESTION_TITLE,
+               Q.CONTENT AS QUESTION_CONTENT,
+               Q.DATE_OF_PRE AS QUESTION_DATE,
+               Q.MEM_NO,
+               M.MEM_ID,
+               A.ANSWER_NO,
+               A.CONTENT AS ANSWER_CONTENT,
+               A.DATE_OF_PRE AS ANSWER_DATE,
+               AD.ADMIN_NICK
+        FROM QUESTION_BOARD Q
+        LEFT JOIN MEMBER M ON Q.MEM_NO = M.MEM_NO
+        LEFT JOIN ANSWER_BOARD A ON Q.QUESTION_NO = A.QUESTION_NO
+        LEFT JOIN ADMIN AD ON A.ADMIN_NO = AD.ADMIN_NO
+        WHERE Q.DEL_YN = 'N'
+        ORDER BY Q.QUESTION_NO DESC
+    </select>	
+
+
+	<select id="boardList" resultType="qABoardVo" parameterType="int">
+        SELECT Q.QUESTION_NO, Q.TITLE AS QUESTION_TITLE, Q.CONTENT AS QUESTION_CONTENT, Q.DATE_OF_PRE AS QUESTION_DATE,
+            A.ANSWER_NO, A.TITLE AS ANSWER_TITLE, A.CONTENT AS ANSWER_CONTENT, A.DATE_OF_PRE AS ANSWER_DATE
+        FROM QUESTION_BOARD Q
+        LEFT JOIN ANSWER_BOARD A
+            ON Q.QUESTION_NO = A.QUESTION_NO
+        WHERE Q.QUESTION_NO = #{question_no}
+    </select>
+    
+    <insert id="insertQuestion" parameterType="qABoardVo">
+	    INSERT INTO QUESTION_BOARD (QUESTION_NO, MEM_NO, TITLE, CONTENT, DATE_OF_PRE)
+	    VALUES (QUESTION_SEQ.NEXTVAL, #{mem_no}, #{question_title}, #{question_content}, SYSDATE)
+	</insert>
+    
+
+	<select id="getQuestionById" parameterType="int" resultMap="QABoardResultMap">
+    SELECT Q.QUESTION_NO,
+           Q.TITLE AS QUESTION_TITLE,
+           Q.CONTENT AS QUESTION_CONTENT,
+           Q.DATE_OF_PRE AS QUESTION_DATE,
+           Q.MEM_NO,
+           M.MEM_ID,
+           A.ANSWER_NO,
+           A.CONTENT AS ANSWER_CONTENT,
+           A.DATE_OF_PRE AS ANSWER_DATE,
+           AD.ADMIN_NICK
+	    FROM QUESTION_BOARD Q
+	    LEFT JOIN MEMBER M ON Q.MEM_NO = M.MEM_NO
+	    LEFT JOIN ANSWER_BOARD A ON Q.QUESTION_NO = A.QUESTION_NO
+	    LEFT JOIN ADMIN AD ON A.ADMIN_NO = AD.ADMIN_NO
+	    WHERE Q.QUESTION_NO = #{question_no} AND Q.DEL_YN = 'N'
+	</select>
+	
+	<update id="deleteQuestion" parameterType="int">
+	    UPDATE QUESTION_BOARD SET DEL_YN = 'Y' WHERE QUESTION_NO = #{questionNo}
+	</update>
+		
+	<update id="updateQuestion" parameterType="kr.or.ddit.board.vo.QABoardVo">
+	    UPDATE QUESTION_BOARD
+	    SET TITLE = #{question_title},
+	        CONTENT = #{question_content}
+	    WHERE QUESTION_NO = #{question_no}
+	</update>
+	
+
+
+
+
+
+
+</mapper>

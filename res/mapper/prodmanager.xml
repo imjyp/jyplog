@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="prodmanager">
+
+	<select id="prodManagementList" resultType="prodVo">
+		WITH RANKEDIMAGES AS (
+		SELECT
+		PI.PROD_NO,
+		PI.PATH,
+		PI.PROD_IMG_NO,
+		ROW_NUMBER()OVER(PARTITION BY PI.PROD_NO ORDER BY PI.PROD_IMG_NO) AS RN
+		FROM
+		PROD_IMG PI
+		)
+		SELECT
+		P.PROD_NO,
+        RI.PATH,
+		SUBSTR(P.PROD_NAME, 1, 20) AS PROD_NAME,
+        CA.CATE_NAME,
+		PR.PROD_PRICE,
+        P.PROD_CLICK_CNT
+        FROM
+		PROD P
+		JOIN PRICE PR ON
+		P.PROD_NO = PR.PROD_NO
+		JOIN
+		CATEGORY CA ON P.CATE_NO = CA.CATE_NO
+		LEFT JOIN RANKEDIMAGES RI ON
+		P.PROD_NO = RI.PROD_NO AND RI.RN = 1
+	</select>
+	
+	
+	<insert id="insertProd" parameterType="prodVo" useGeneratedKeys="true" keyProperty="prod_no" keyColumn="PROD_NO">
+		INSERT INTO PROD (
+		PROD_NO,
+		PROD_NAME,
+		PROD_DESCRIPTION,
+		CATE_NO
+		) VALUES (
+		SEQ_PROD_NO.NEXTVAL,
+		#{prod_name},#{prod_description},#{cate_no})
+	</insert>
+
+	<insert id="insertPrice" parameterType="prodVo">
+		INSERT INTO PRICE (
+		PROD_NO,
+		PROD_PRICE
+		) VALUES (
+		#{prod_no},
+		#{prod_price}
+		)
+	</insert>
+
+	<insert id="insertProdImage" parameterType="prodImgVo">
+		INSERT INTO PROD_IMG (
+		PROD_IMG_NO,
+		PROD_NO,
+		PATH
+		) VALUES (
+		SEQ_PROD_IMG_NO.NEXTVAL,
+		#{prod_no},
+		#{path}
+		)
+	</insert>
+
+	<insert id="insertProdOption" parameterType="prodOptionVo">
+		INSERT INTO PROD_OPTION (
+		PROD_OPTION_NO,
+		PROD_NO,
+		PROD_OPTION_DETAIL,
+		PROD_OPTION_PRICE,
+		PROD_COLOR,
+		ADD_PROD_PRICE,
+		ADD_PROD_OPTION
+		) VALUES (
+		SEQ_PROD_OPTION_NO.NEXTVAL,
+		#{prod_no},
+		#{prod_option_detail},
+		#{prod_option_price},
+		#{prod_color},
+		#{add_prod_price},
+		#{add_prod_option}
+		)
+	</insert>
+	
+	<update id="updateProd" parameterType="prodVo">
+		UPDATE PROD
+		SET
+			PROD_NAME = #{prod_name},
+			PROD_DESCRIPTION = #{prod_description},
+			CATE_NO = #{cate_no}
+		WHERE PROD_NO = #{prod_no}
+	</update>
+	
+	<update id="updatePrice" parameterType="prodVo">
+	    UPDATE PRICE
+	    SET
+	        PROD_PRICE = #{prod_price}
+	    WHERE PROD_NO = #{prod_no}
+	</update>
+	
+	 <!-- 가격 정보 삭제 -->
+    <delete id="deletePrice" parameterType="int">
+        DELETE FROM PRICE WHERE PROD_NO = #{prod_no}
+    </delete>
+	
+	<delete id="deleteProdOptions" parameterType="int">
+	    DELETE FROM PROD_OPTION
+	    WHERE PROD_NO = #{prod_no}
+	</delete>
+	
+	<delete id="deleteProdImages" parameterType="int">
+	    DELETE FROM PROD_IMG
+	    WHERE PROD_NO = #{prod_no}
+	</delete>
+	
+	 <!-- 상품 삭제 -->
+    <delete id="deleteProd" parameterType="int">
+        DELETE FROM PROD WHERE PROD_NO = #{prod_no}
+    </delete>
+	
+	
+	<update id="updateProdOption" parameterType="prodOptionVo">
+	    UPDATE PROD_OPTION
+	    SET
+	        PROD_OPTION_DETAIL = #{prod_option_detail},
+	        PROD_OPTION_PRICE = #{prod_option_price},
+	        PROD_COLOR = #{prod_color}
+	    WHERE PROD_OPTION_NO = #{prod_option_no}
+	</update>
+	
+	
+	<delete id="deleteProdCascade" parameterType="int">
+        <!-- 자식 테이블 데이터 삭제 -->
+        DELETE FROM PRICE WHERE PROD_NO = #{prod_no};
+        DELETE FROM PROD_OPTION WHERE PROD_NO = #{prod_no};
+        DELETE FROM PROD_IMG WHERE PROD_NO = #{prod_no};
+        <!-- 부모 테이블 데이터 삭제 -->
+        DELETE FROM PROD WHERE PROD_NO = #{prod_no};
+    </delete>
+
+
+
+</mapper>

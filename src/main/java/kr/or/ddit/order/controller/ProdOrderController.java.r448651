@@ -1,0 +1,55 @@
+package kr.or.ddit.order.controller;
+
+import java.io.IOException;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import kr.or.ddit.order.service.IProdOrderService;
+import kr.or.ddit.order.service.ProdOrderServiceImpl;
+import kr.or.ddit.order.vo.ProdOrderVo;
+
+@WebServlet("/prodOrder.do")
+public class ProdOrderController extends HttpServlet {
+
+	private IProdOrderService prodOrderService = ProdOrderServiceImpl.getInstance();
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setCharacterEncoding("UTF-8");
+
+		// 상품 주문 정보 저장
+		String orderNoParam = req.getParameter("orderNo");
+		String prodNoParam = req.getParameter("prodNo");
+		String orderCntParam = req.getParameter("orderCnt");
+
+		if (orderNoParam == null || orderNoParam.isEmpty() || prodNoParam == null || prodNoParam.isEmpty()
+				|| orderCntParam == null || orderCntParam.isEmpty()) {
+			req.setAttribute("errorMessage", "상품 정보가 유효하지 않습니다.");
+			req.getRequestDispatcher("/WEB-INF/view/pay/order.jsp").forward(req, resp);
+			return;
+		}
+
+		int orderNo = Integer.parseInt(orderNoParam);
+		int prodNo = Integer.parseInt(prodNoParam);
+		int orderCnt = Integer.parseInt(orderCntParam);
+		System.out.println("Product info: orderNo = " + orderNo + ", prodNo = " + prodNo + ", orderCnt = " + orderCnt); // 디버깅
+
+		ProdOrderVo prodOrder = new ProdOrderVo();
+		prodOrder.setOrderNo(orderNo);
+		prodOrder.setProdNo(prodNo);
+		prodOrder.setOrderCnt(orderCnt);
+
+		int prodOrderResult = prodOrderService.insertProdOrder(prodOrder);
+		System.out.println("ProdOrder result: " + prodOrderResult); // 디버깅
+
+		if (prodOrderResult <= 0) {
+			req.setAttribute("errorMessage", "주문 상품 처리에 실패했습니다.");
+			req.getRequestDispatcher("/WEB-INF/view/pay/order.jsp").forward(req, resp);
+		} else {
+			req.getRequestDispatcher("/WEB-INF/view/pay/success.jsp").forward(req, resp);
+		}
+	}
+}
